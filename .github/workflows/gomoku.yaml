@@ -51,7 +51,7 @@ jobs:
 
 
   push_to_mirror:
-    # needs: [run_tests]
+    needs: [check_program_compilation]
 
     runs-on: ubuntu-latest
 
