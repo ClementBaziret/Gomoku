@@ -1,0 +1,71 @@
+name: Zappy
+
+on:
+  push:
+    branches-ignore:
+      - 'ga-ignore-*'
+  pull_request:
+    branches-ignore:
+      - 'ga-ignore-*'
+env:
+  MIRROR_URL: "git@github.com:EpitechPromo2027/B-AIA-500-NAN-5-1-gomoku-florent.charpentier.git"
+  EXECUTABLES: "target/debug/gomoku"
+
+jobs:
+  check_program_compilation:
+    runs-on: ubuntu-latest
+
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+      - name: Checkout fetch
+        uses: actions/checkout@v3.3.0
+      - name: cargo build
+        timeout-minutes: 3
+        run: cargo build
+      - name: check execs
+        run: |
+          for executables in $(echo "${{ env.EXECUTABLES }}" | tr ',' ' '); do
+            if [ ! -x "${executables}" ]; then
+              echo "Executable ${executables} doesn't exist or isn't excutable."
+              exit 1
+            fi
+          done
+
+
+  run_tests:
+    needs: [check_program_compilation]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+      - name: Checkout fetch
+        uses: actions/checkout@v3.3.0
+      - name: cargo test
+        timeout-minutes: 2
+        run: cargo test
+
+
+  push_to_mirror:
+    # needs: [run_tests]
+
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event_name == 'push' }}
+
+    steps:
+      - name: Checkout fetch
+        uses: actions/checkout@v3.3.0
+        with:
+          fetch-depth: 0
+
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ env.MIRROR_URL}}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
