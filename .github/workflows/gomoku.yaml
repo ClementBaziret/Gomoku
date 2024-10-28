@@ -1,4 +1,4 @@
-name: Zappy
+name: Gomoku
 
 on:
   push:
