@@ -16,7 +16,7 @@
         "type": "github"
       }
     },
-    "nixpkgs-cargo-1-75": {
+    "nixpkgs-rust-1-75": {
       "locked": {
         "lastModified": 1708815994,
         "narHash": "sha256-hL7N/ut2Xu0NaDxDMsw2HagAjgDskToGiyZOWriiLYM=",
@@ -35,7 +35,7 @@
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "nixpkgs-cargo-1-75": "nixpkgs-cargo-1-75"
+        "nixpkgs-rust-1-75": "nixpkgs-rust-1-75"
       }
     }
   },
