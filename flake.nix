@@ -20,9 +20,13 @@
       in pkgs.mkShell {
         packages = with pkgs; [
           bashInteractiveFHS
+          gnumake
 
           cargo
         ];
+
+        # Set an environment variable that will be read by the Makefile
+        BUILD_MODE="DEBUG";
 
         shellHook = ''
           echo Custom Cargo nix-shell !
