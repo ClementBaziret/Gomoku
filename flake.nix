@@ -26,6 +26,7 @@
         ]) ++ (with rust1-75; [
           rustc
           cargo
+          rustfmt
         ]);
 
         # Set an environment variable that will be read by the Makefile
