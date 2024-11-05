@@ -1,10 +1,6 @@
 use crate::my_board::{MyBoard, Status};
 use std::io;
 
-use rand::Rng;
-use std::fs::File;
-use std::io::Write;
-
 #[derive(Debug, Clone)]
 pub struct MyAI {
     pub my_board: MyBoard,
@@ -65,13 +61,13 @@ impl MyAI {
         false
     }
 
-    fn handle_begin(&mut self, _cmd: &str, file: &File) -> bool {
+    fn handle_begin(&mut self, _cmd: &str) -> bool {
         self.begin = true;
-        self.my_board.send_new_pos(&file);
+        self.my_board.send_new_pos();
         false
     }
 
-    fn handle_turn(&mut self, cmd: &str, mut file: &File) -> bool {
+    fn handle_turn(&mut self, cmd: &str) -> bool {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
         let mut x = 0;
         let mut y = 0;
@@ -89,30 +85,12 @@ impl MyAI {
                 }
             }
         }
-        let _ = file.write_all(
-            format!(
-                "recieved value before: {}, {}, {}\n",
-                x,
-                y,
-                self.my_board.fetch_cell(x, y).to_str()
-            )
-            .as_bytes(),
-        );
         self.my_board.set_cell(x, y, Status::Enemy);
-        let _ = file.write_all(
-            format!(
-                "recieved value before: {}, {}, {}\n",
-                x,
-                y,
-                self.my_board.fetch_cell(x, y).to_str()
-            )
-            .as_bytes(),
-        );
-        self.my_board.send_new_pos(&file);
+        self.my_board.send_new_pos();
         false
     }
 
-    fn handle_board(&mut self, _cmd: &str, file: &File) -> bool {
+    fn handle_board(&mut self, _cmd: &str) -> bool {
         let mut input = String::new();
         self.my_board.clear_board();
 
@@ -156,7 +134,7 @@ impl MyAI {
                 self.my_board.set_cell(x, y, Status::Enemy);
             }
         }
-        self.my_board.send_new_pos(&file);
+        self.my_board.send_new_pos();
         false
     }
 
@@ -165,7 +143,7 @@ impl MyAI {
         println!("{log_str}: {msg}");
     }
 
-    pub fn handle_command(&mut self, cmd: &str, file: &File) -> bool {
+    pub fn handle_command(&mut self, cmd: &str) -> bool {
         let uppercase =
             cmd.split_whitespace().next().unwrap().to_uppercase();
         let token = uppercase.as_str();
@@ -175,9 +153,9 @@ impl MyAI {
             "START" => self.handle_start(&cmd),
             "END" => self.handle_end(&cmd),
             "INFO" => self.handle_info(&cmd),
-            "BEGIN" => self.handle_begin(&cmd, &file),
-            "TURN" => self.handle_turn(&cmd, &file),
-            "BOARD" => self.handle_board(&cmd, &file),
+            "BEGIN" => self.handle_begin(&cmd),
+            "TURN" => self.handle_turn(&cmd),
+            "BOARD" => self.handle_board(&cmd),
             _ => {
                 self.send_log(
                     LogType::Unknown,
@@ -189,28 +167,19 @@ impl MyAI {
     }
     pub fn start_loop(&mut self) -> std::io::Result<()> {
         let mut input = String::new();
-        let mut rng = rand::thread_rng();
-        let y: u8 = rng.gen();
-        let mut file = File::create(format!("input{}.txt", y))?;
-        let mut file2 = File::create(format!("output{}.txt", y))?;
 
         loop {
             input.clear();
             let n = io::stdin().read_line(&mut input)?;
-            file.write_all(input.as_bytes())?;
 
             if n == 0 {
                 break;
             }
 
-            if self.handle_command(&input, &file2) {
+            if self.handle_command(&input) {
                 break;
             }
-            // Debug: prints the board
-            // self.my_board.print();
         }
-        file2.flush()?;
-        file.flush()?;
         Ok(())
     }
 }
