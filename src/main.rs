@@ -1,5 +1,5 @@
-mod my_board;
 mod my_ai;
+mod my_board;
 
 use my_ai::MyAI;
 

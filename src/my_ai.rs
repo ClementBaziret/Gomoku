@@ -75,7 +75,7 @@ impl MyAI {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
         let mut x = 0;
         let mut y = 0;
-    
+
         if let Some(&number_str) = parse.get(1) {
             let parts: Vec<&str> = number_str.split(',').collect();
             if let Some(x_str) = parts.get(0) {
@@ -89,9 +89,25 @@ impl MyAI {
                 }
             }
         }
-        let _ = file.write_all(format!("recieved value before: {}, {}, {}\n", x, y, self.my_board.fetch_cell(x, y).to_str()).as_bytes());
+        let _ = file.write_all(
+            format!(
+                "recieved value before: {}, {}, {}\n",
+                x,
+                y,
+                self.my_board.fetch_cell(x, y).to_str()
+            )
+            .as_bytes(),
+        );
         self.my_board.set_cell(x, y, Status::Enemy);
-        let _ = file.write_all(format!("recieved value before: {}, {}, {}\n", x, y, self.my_board.fetch_cell(x, y).to_str()).as_bytes());
+        let _ = file.write_all(
+            format!(
+                "recieved value before: {}, {}, {}\n",
+                x,
+                y,
+                self.my_board.fetch_cell(x, y).to_str()
+            )
+            .as_bytes(),
+        );
         self.my_board.send_new_pos(&file);
         false
     }
