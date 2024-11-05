@@ -6,5 +6,5 @@ use my_ai::MyAI;
 fn main() -> std::io::Result<()> {
     let mut ai = MyAI::new();
 
-    return ai.start_loop();
+    ai.start_loop()
 }
