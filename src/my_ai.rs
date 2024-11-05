@@ -1,9 +1,9 @@
 use crate::my_board::{MyBoard, Status};
 use std::io;
 
-use std::io::{Write};
-use std::fs::File;
 use rand::Rng;
+use std::fs::File;
+use std::io::Write;
 
 #[derive(Debug, Clone)]
 pub struct MyAI {
@@ -45,7 +45,7 @@ impl MyAI {
 
     fn handle_start(&mut self, cmd: &str) -> bool {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
-        
+
         if let Some(&number_str) = parse.get(1) {
             if let Ok(size) = number_str.parse::<usize>() {
                 self.my_board.resize(size);
@@ -54,7 +54,7 @@ impl MyAI {
                 return false;
             }
         }
-        return false;
+        false
     }
 
     fn handle_end(&mut self, _cmd: &str) -> bool {
@@ -68,28 +68,32 @@ impl MyAI {
     fn handle_begin(&mut self, _cmd: &str, file: &File) -> bool {
         self.begin = true;
         self.my_board.send_new_pos(&file);
-        return false;
+        false
     }
 
-    fn handle_turn(&mut self, cmd: &str, file: &File) -> bool {
+    fn handle_turn(&mut self, cmd: &str, mut file: &File) -> bool {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
         let mut x = 0;
         let mut y = 0;
-
+    
         if let Some(&number_str) = parse.get(1) {
-            if let Ok(size) = number_str.parse::<usize>() {
-                x = size;
+            let parts: Vec<&str> = number_str.split(',').collect();
+            if let Some(x_str) = parts.get(0) {
+                if let Ok(size) = x_str.parse::<usize>() {
+                    x = size;
+                }
+            }
+            if let Some(y_str) = parts.get(1) {
+                if let Ok(size) = y_str.parse::<usize>() {
+                    y = size;
+                }
             }
         }
-        if let Some(&number_str) = parse.get(1) {
-            if let Ok(size) = number_str.parse::<usize>() {
-                y = size;
-            }
-        }
-
+        let _ = file.write_all(format!("recieved value before: {}, {}, {}\n", x, y, self.my_board.fetch_cell(x, y).to_str()).as_bytes());
         self.my_board.set_cell(x, y, Status::Enemy);
+        let _ = file.write_all(format!("recieved value before: {}, {}, {}\n", x, y, self.my_board.fetch_cell(x, y).to_str()).as_bytes());
         self.my_board.send_new_pos(&file);
-        return false;
+        false
     }
 
     fn handle_board(&mut self, _cmd: &str) -> bool {
@@ -102,7 +106,8 @@ impl MyAI {
     }
 
     pub fn handle_command(&mut self, cmd: &str, file: &File) -> bool {
-        let uppercase = cmd.split_whitespace().next().unwrap().to_uppercase();
+        let uppercase =
+            cmd.split_whitespace().next().unwrap().to_uppercase();
         let token = uppercase.as_str();
 
         match token {
@@ -114,7 +119,10 @@ impl MyAI {
             "TURN" => self.handle_turn(&cmd, &file),
             "BOARD" => self.handle_board(&cmd),
             _ => {
-                self.send_log(LogType::Unknown, "command not implemented");
+                self.send_log(
+                    LogType::Unknown,
+                    "command not implemented",
+                );
                 false
             }
         }
@@ -122,26 +130,25 @@ impl MyAI {
     pub fn start_loop(&mut self) -> std::io::Result<()> {
         let mut input = String::new();
         let mut rng = rand::thread_rng();
-        let y: u8 = rng.gen(); // generates a float between 0 and 1
+        let y: u8 = rng.gen();
         let mut file = File::create(format!("input{}.txt", y))?;
         let mut file2 = File::create(format!("output{}.txt", y))?;
 
         loop {
-                input.clear();
-                let n = io::stdin().read_line(&mut input)?;
-                // file.write_all(input.as_bytes())?;
-        
-                if n == 0 {
-                    break;
-                }
-                
-                if self.handle_command(&input, &file2) {
-                    break;
-                }
-                // ai.my_board.print();
+            input.clear();
+            let n = io::stdin().read_line(&mut input)?;
+            file.write_all(input.as_bytes())?;
+
+            if n == 0 {
+                break;
             }
-            file2.flush()?;
-            file.flush()?;
-            return Ok(());
+
+            if self.handle_command(&input, &file2) {
+                break;
+            }
+        }
+        file2.flush()?;
+        file.flush()?;
+        Ok(())
     }
 }

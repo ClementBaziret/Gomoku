@@ -1,5 +1,5 @@
 use rand::Rng;
-use std::io::{Write};
+use std::io::Write;
 use std::fs::File;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -7,6 +7,16 @@ pub enum Status {
     Empty,
     Enemy,
     Ally,
+}
+
+impl Status {
+    pub fn to_str(&self) -> &str {
+        match self {
+            Self::Empty => "Empty",
+            Self::Enemy => "Enemy",
+            Self::Ally => "Ally",
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -28,13 +38,13 @@ impl MyBoard {
     }
 
     pub fn fetch_cell(&mut self, x: usize, y:usize) -> Status {
-        let place = (y * self.size) + x;
-        return self.board[place];
+        let cell = (y * self.size) + x;
+        self.board[cell]
     }
 
     pub fn set_cell(&mut self, x: usize, y:usize, state: Status) {
-        let place = (y * self.size) + x;
-        self.board[place] = state;
+        let cell = (y * self.size) + x;
+        self.board[cell] = state;
     }
 
     pub fn print(&self) {
@@ -54,18 +64,19 @@ impl MyBoard {
         // send a random cell
         let mut rng = rand::thread_rng();
 
-        let mut x: usize = 0;
-        let mut y: usize = 0;
+        let mut x: usize = rng.gen_range(0..=19);
+        let mut y: usize = rng.gen_range(0..=19);
 
-        while self.board[(20 * y) + x] != Status::Empty {
-            // file.write_all(format!("failed value: {}, {}\n", x, y).as_bytes());
-
+        let _ = file.write_all(format!("checked value before: {}, {}, {}\n", x, y, self.fetch_cell(x, y).to_str()).as_bytes());
+        while self.fetch_cell(x, y) != Status::Empty {
+            let _ = file.write_all(format!("failed value: {}, {}\n", x, y).as_bytes());
+            
             x = rng.gen_range(0..=19);
             y = rng.gen_range(0..=19);
             
         }
         self.set_cell(x, y, Status::Ally);
+        let _ = file.write_all(format!("checked value after : {}, {}, {}\n", x, y, self.fetch_cell(x, y).to_str()).as_bytes());
         println!("{}, {}", x, y);
-        // file.write_all(format!("new pos: {}, {}\n", x, y).as_bytes());
     }
 }
