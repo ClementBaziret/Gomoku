@@ -53,6 +53,15 @@ impl MyBoard {
         self.board[cell] = state;
     }
 
+    pub fn index_to_coordinates(
+        &self,
+        index: usize,
+    ) -> (usize, usize) {
+        let x = index % self.size;
+        let y = index / self.size;
+        (x, y)
+    }
+
     pub fn print(&self) {
         for (i, status) in self.board.iter().enumerate() {
             let symbol = match status {
@@ -67,7 +76,7 @@ impl MyBoard {
         }
     }
 
-    fn calculate_next_move(&self) -> usize {
+    pub fn calculate_next_move(&self) -> (usize, usize) {
         let root = self.generate_tree();
         let mut best_move = &Move {
             move_position: usize::MAX,
@@ -76,14 +85,13 @@ impl MyBoard {
         let mut best_move_value: u32 = 0;
 
         for child in &root.next_moves {
-            println!("Move position: {}", child.move_position);
             let move_value = self.evaluate_board(child);
             if move_value > best_move_value {
                 best_move_value = move_value;
                 best_move = child;
             }
         }
-        return best_move.move_position;
+        self.index_to_coordinates(best_move.move_position)
     }
 
     fn generate_tree(&self) -> Move {
@@ -109,11 +117,7 @@ impl MyBoard {
     }
 
     pub fn send_new_pos(&mut self, mut file: &File) {
-        // send a random cell
-        let mut rng = rand::thread_rng();
-
-        let mut x: usize = rng.gen_range(0..=19);
-        let mut y: usize = rng.gen_range(0..=19);
+        let (x, y) = self.calculate_next_move();
 
         let _ = file.write_all(
             format!(
@@ -124,14 +128,6 @@ impl MyBoard {
             )
             .as_bytes(),
         );
-        while self.fetch_cell(x, y) != Status::Empty {
-            let _ = file.write_all(
-                format!("failed value: {}, {}\n", x, y).as_bytes(),
-            );
-
-            x = rng.gen_range(0..=19);
-            y = rng.gen_range(0..=19);
-        }
         self.set_cell(x, y, Status::Ally);
         let _ = file.write_all(
             format!(
