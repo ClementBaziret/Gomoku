@@ -56,8 +56,7 @@ impl MyAI {
     }
 
     fn evaluate_board(&self, _move: &Node) -> u32 {
-        let mut rng = rand::thread_rng();
-        return rng.gen_range(0..=100);
+        return rand::thread_rng().gen_range(0..=100);
     }
 }
 
