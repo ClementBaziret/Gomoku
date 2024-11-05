@@ -21,4 +21,5 @@ target/
 /target
 pbrain-gomoku-ai
 *.log
+*.txt
 liskvork-0.4.3-x86_64-linux-musl
