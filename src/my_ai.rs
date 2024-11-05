@@ -1,7 +1,7 @@
 use crate::my_board::{MyBoard, Status};
 use std::io;
 
-use rand::Rng;
+// use rand::Rng;
 use std::fs::File;
 use std::io::Write;
 
@@ -189,10 +189,10 @@ impl MyAI {
     }
     pub fn start_loop(&mut self) -> std::io::Result<()> {
         let mut input = String::new();
-        let mut rng = rand::thread_rng();
-        let y: u8 = rng.gen();
-        let mut file = File::create(format!("input{}.txt", y))?;
-        let mut file2 = File::create(format!("output{}.txt", y))?;
+        // let mut rng = rand::thread_rng();
+        // let y: u8 = rng.gen();
+        let mut file = File::create(format!("input.txt"))?;
+        let mut file2 = File::create(format!("output.txt"))?;
 
         loop {
             input.clear();
