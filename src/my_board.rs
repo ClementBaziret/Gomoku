@@ -76,6 +76,12 @@ impl MyBoard {
         }
     }
 
+    pub fn clear_board(&mut self) {
+        for status in self.board.iter_mut() {
+            *status = Status::Empty;
+        }
+    }
+
     pub fn calculate_next_move(&self) -> (usize, usize) {
         let root = self.generate_tree();
         let mut best_move = &Move {
