@@ -1,5 +1,5 @@
 use crate::my_board::{MyBoard, Status};
-use std::io;
+use std::{error, io};
 
 use rand::Rng;
 use std::fs::File;
@@ -113,7 +113,49 @@ impl MyAI {
     }
 
     fn handle_board(&mut self, _cmd: &str) -> bool {
-        todo!()
+        let mut input = String::new();
+        self.my_board.clear_board();
+
+        loop {
+            input.clear();
+            let n = io::stdin().read_line(&mut input);
+            match n {
+                Ok(_) => {}
+                Err(_e) => {
+                    return false;
+                }
+            }
+            if input == "DONE\n" {
+                return false;
+            }
+            let parts: Vec<&str> = input.split(',').collect();
+            if parts.len() != 3 {
+                return false;
+            }
+            let x = match parts[0].parse::<usize>() {
+                Ok(num) => num,
+                Err(_) => {
+                    return false;
+                }
+            };
+            let y = match parts[1].parse::<usize>() {
+                Ok(num) => num,
+                Err(_) => {
+                    return false;
+                }
+            };
+            let player = match parts[2].trim_end().parse::<usize>() {
+                Ok(num) => num,
+                Err(_) => {
+                    return false;
+                }
+            };
+            if player == 1 {
+                self.my_board.set_cell(x, y, Status::Ally);
+            } else {
+                self.my_board.set_cell(x, y, Status::Enemy);
+            }
+        }
     }
 
     fn send_log(&self, log_type: LogType, msg: &str) {
@@ -162,6 +204,8 @@ impl MyAI {
             if self.handle_command(&input, &file2) {
                 break;
             }
+            // Debug: prints the board
+            // self.my_board.print();
         }
         file2.flush()?;
         file.flush()?;

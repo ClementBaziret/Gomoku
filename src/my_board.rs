@@ -61,6 +61,13 @@ impl MyBoard {
             }
         }
     }
+
+    pub fn clear_board(&mut self) {
+        for status in self.board.iter_mut() {
+            *status = Status::Empty;
+        }
+    }
+
     pub fn send_new_pos(&mut self, mut file: &File) {
         // send a random cell
         let mut rng = rand::thread_rng();
