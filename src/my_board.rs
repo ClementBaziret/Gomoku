@@ -1,7 +1,3 @@
-use rand::Rng;
-use std::fs::File;
-use std::io::Write;
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Status {
     Empty,
@@ -119,31 +115,13 @@ impl MyBoard {
     }
 
     fn evaluate_board(&self, _move: &Move) -> u32 {
-        return rand::thread_rng().gen_range(0..=100);
+        return 10; // Fixed evaluation value for now
     }
 
-    pub fn send_new_pos(&mut self, mut file: &File) {
+    pub fn send_new_pos(&mut self) {
         let (x, y) = self.calculate_next_move();
 
-        let _ = file.write_all(
-            format!(
-                "checked value before: {}, {}, {}\n",
-                x,
-                y,
-                self.fetch_cell(x, y).to_str()
-            )
-            .as_bytes(),
-        );
         self.set_cell(x, y, Status::Ally);
-        let _ = file.write_all(
-            format!(
-                "checked value after : {}, {}, {}\n",
-                x,
-                y,
-                self.fetch_cell(x, y).to_str()
-            )
-            .as_bytes(),
-        );
         println!("{}, {}", x, y);
     }
 }
