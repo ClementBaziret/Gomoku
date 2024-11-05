@@ -1,5 +1,5 @@
 use crate::my_board::{MyBoard, Status};
-use std::{error, io};
+use std::io;
 
 use rand::Rng;
 use std::fs::File;
@@ -112,7 +112,7 @@ impl MyAI {
         false
     }
 
-    fn handle_board(&mut self, _cmd: &str) -> bool {
+    fn handle_board(&mut self, _cmd: &str, file: &File) -> bool {
         let mut input = String::new();
         self.my_board.clear_board();
 
@@ -126,7 +126,7 @@ impl MyAI {
                 }
             }
             if input == "DONE\n" {
-                return false;
+                break;
             }
             let parts: Vec<&str> = input.split(',').collect();
             if parts.len() != 3 {
@@ -156,6 +156,8 @@ impl MyAI {
                 self.my_board.set_cell(x, y, Status::Enemy);
             }
         }
+        self.my_board.send_new_pos(&file);
+        false
     }
 
     fn send_log(&self, log_type: LogType, msg: &str) {
@@ -175,7 +177,7 @@ impl MyAI {
             "INFO" => self.handle_info(&cmd),
             "BEGIN" => self.handle_begin(&cmd, &file),
             "TURN" => self.handle_turn(&cmd, &file),
-            "BOARD" => self.handle_board(&cmd),
+            "BOARD" => self.handle_board(&cmd, &file),
             _ => {
                 self.send_log(
                     LogType::Unknown,
