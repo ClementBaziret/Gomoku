@@ -43,9 +43,10 @@ impl MyAI {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
 
         if let Some(&number_str) = parse.get(1) {
-            if let Ok(size) = number_str.parse::<usize>() {
-                self.my_board.resize(size);
-                self.my_board.size = size;
+            if let Ok(_size) = number_str.parse::<usize>() {
+                // self.my_board.resize(size);
+                // self.my_board.size = size;
+                // I don't know what to do of this
                 println!("OK");
                 return false;
             }
@@ -85,7 +86,7 @@ impl MyAI {
                 }
             }
         }
-        self.my_board.set_cell(x, y, CellType::Enemy);
+        self.my_board.board[y as usize][x as usize] = CellType::Enemy;
         self.my_board.send_new_pos();
         false
     }
@@ -129,9 +130,11 @@ impl MyAI {
                 }
             };
             if player == 1 {
-                self.my_board.set_cell(x, y, CellType::Ally);
+                self.my_board.board[y as usize][x as usize] =
+                    CellType::Ally;
             } else {
-                self.my_board.set_cell(x, y, CellType::Enemy);
+                self.my_board.board[y as usize][x as usize] =
+                    CellType::Enemy;
             }
         }
         self.my_board.send_new_pos();
