@@ -21,13 +21,13 @@ pub struct MyBoard {
     pub size: usize,
 }
 
-    impl MyBoard {
-        pub fn new() -> Self {
-            MyBoard {
-                board: Vec::new(),
-                size: 0,
-            }
+impl MyBoard {
+    pub fn new() -> Self {
+        MyBoard {
+            board: Vec::new(),
+            size: 0,
         }
+    }
 
     pub fn resize(&mut self, size: usize) {
         let new_size = size * size;
