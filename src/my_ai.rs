@@ -43,7 +43,7 @@ impl MyAI {
     fn handle_start(&mut self, cmd: &str) -> bool {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
         if let Some(&number_str) = parse.get(1) {
-        if let Ok(size) = number_str.parse::<usize>() {
+            if let Ok(size) = number_str.parse::<usize>() {
                 if size != 20 {
                     println!("ERROR invalid size.");
                     return false;
