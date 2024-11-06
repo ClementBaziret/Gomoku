@@ -21,13 +21,13 @@ pub struct MyBoard {
     pub size: usize,
 }
 
-impl MyBoard {
-    pub fn new() -> Self {
-        MyBoard {
-            board: Vec::new(),
-            size: 0,
+    impl MyBoard {
+        pub fn new() -> Self {
+            MyBoard {
+                board: Vec::new(),
+                size: 0,
+            }
         }
-    }
 
     pub fn resize(&mut self, size: usize) {
         let new_size = size * size;
@@ -44,7 +44,7 @@ impl MyBoard {
         self.board[cell] = state;
     }
 
-    pub fn print(&self) {
+    pub fn print_board(&self) {
         for (i, status) in self.board.iter().enumerate() {
             let symbol = match status {
                 Status::Empty => '.',
@@ -75,6 +75,6 @@ impl MyBoard {
             }
         }
         self.set_cell(x, y, Status::Ally);
-        println!("{}, {}", x, y);
+        println!("{},{}", x, y);
     }
 }
