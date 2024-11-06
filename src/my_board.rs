@@ -103,7 +103,7 @@ impl MyBoard {
         };
 
         for (index, status) in self.board.iter().enumerate() {
-            if matches!(status, Status::Empty) {
+            if *status == Status::Empty {
                 let child_move = Move {
                     move_position: index,
                     next_moves: Vec::new(),
