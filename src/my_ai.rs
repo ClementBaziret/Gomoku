@@ -1,4 +1,4 @@
-use crate::my_board::{MyBoard, Status};
+use crate::my_board::{CellType, MyBoard};
 use std::io;
 
 #[derive(Debug, Clone)]
@@ -85,7 +85,7 @@ impl MyAI {
                 }
             }
         }
-        self.my_board.set_cell(x, y, Status::Enemy);
+        self.my_board.set_cell(x, y, CellType::Enemy);
         self.my_board.send_new_pos();
         false
     }
@@ -129,9 +129,9 @@ impl MyAI {
                 }
             };
             if player == 1 {
-                self.my_board.set_cell(x, y, Status::Ally);
+                self.my_board.set_cell(x, y, CellType::Ally);
             } else {
-                self.my_board.set_cell(x, y, Status::Enemy);
+                self.my_board.set_cell(x, y, CellType::Enemy);
             }
         }
         self.my_board.send_new_pos();

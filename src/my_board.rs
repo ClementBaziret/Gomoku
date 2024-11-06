@@ -1,11 +1,11 @@
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Status {
+pub enum CellType {
     Empty,
     Enemy,
     Ally,
 }
 
-impl Status {
+impl CellType {
     pub fn to_str(&self) -> &str {
         match self {
             Self::Empty => "Empty",
@@ -17,7 +17,8 @@ impl Status {
 
 #[derive(Debug, Clone)]
 pub struct MyBoard {
-    pub board: Vec<Status>,
+    // pub board: [[CellType; 20]; 20]
+    pub board: Vec<CellType>,
     pub size: usize,
 }
 
@@ -36,15 +37,15 @@ impl MyBoard {
 
     pub fn resize(&mut self, size: usize) {
         let new_size = size * size;
-        self.board = vec![Status::Empty; new_size];
+        self.board = vec![CellType::Empty; new_size];
     }
 
-    pub fn fetch_cell(&mut self, x: usize, y: usize) -> Status {
+    pub fn fetch_cell(&mut self, x: usize, y: usize) -> CellType {
         let cell = (y * self.size) + x;
         self.board[cell]
     }
 
-    pub fn set_cell(&mut self, x: usize, y: usize, state: Status) {
+    pub fn set_cell(&mut self, x: usize, y: usize, state: CellType) {
         let cell = (y * self.size) + x;
         self.board[cell] = state;
     }
@@ -61,9 +62,9 @@ impl MyBoard {
     pub fn print(&self) {
         for (i, status) in self.board.iter().enumerate() {
             let symbol = match status {
-                Status::Empty => '.',
-                Status::Enemy => 'X',
-                Status::Ally => 'O',
+                CellType::Empty => '.',
+                CellType::Enemy => 'X',
+                CellType::Ally => 'O',
             };
             print!("{} ", symbol);
             if (i + 1) % self.size == 0 {
@@ -74,7 +75,7 @@ impl MyBoard {
 
     pub fn clear_board(&mut self) {
         for status in self.board.iter_mut() {
-            *status = Status::Empty;
+            *status = CellType::Empty;
         }
     }
 
@@ -103,7 +104,7 @@ impl MyBoard {
         };
 
         for (index, status) in self.board.iter().enumerate() {
-            if *status == Status::Empty {
+            if *status == CellType::Empty {
                 let child_move = Move {
                     move_position: index,
                     next_moves: Vec::new(),
@@ -121,7 +122,7 @@ impl MyBoard {
     pub fn send_new_pos(&mut self) {
         let (x, y) = self.calculate_next_move();
 
-        self.set_cell(x, y, Status::Ally);
+        self.set_cell(x, y, CellType::Ally);
         println!("{}, {}", x, y);
     }
 }
