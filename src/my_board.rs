@@ -58,7 +58,7 @@ impl MyBoard {
         (x, y)
     }
 
-    pub fn print(&self) {
+    pub fn print_board(&self) {
         for (i, status) in self.board.iter().enumerate() {
             let symbol = match status {
                 Status::Empty => '.',
@@ -122,6 +122,6 @@ impl MyBoard {
         let (x, y) = self.calculate_next_move();
 
         self.set_cell(x, y, Status::Ally);
-        println!("{}, {}", x, y);
+        println!("{},{}", x, y);
     }
 }
