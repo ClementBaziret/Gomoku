@@ -14,6 +14,12 @@ all: $(NAME)
 $(NAME): $(TARGET)
 	ln -sf $< $@
 
+fclean:
+	rm -f $(NAME)
+	cargo clean
+
+re: fclean all
+
 $(RELEASE_TARGET):
 	cargo build --release
 

@@ -174,6 +174,7 @@ impl MyAI {
             }
         }
     }
+
     pub fn start_loop(&mut self) -> std::io::Result<()> {
         let mut input = String::new();
 

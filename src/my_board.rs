@@ -21,6 +21,11 @@ pub struct MyBoard {
     pub size: usize,
 }
 
+struct Move {
+    move_position: usize,
+    next_moves: Vec<Move>,
+}
+
 impl MyBoard {
     pub fn new() -> Self {
         MyBoard {
@@ -44,6 +49,15 @@ impl MyBoard {
         self.board[cell] = state;
     }
 
+    pub fn index_to_coordinates(
+        &self,
+        index: usize,
+    ) -> (usize, usize) {
+        let x = index % self.size;
+        let y = index / self.size;
+        (x, y)
+    }
+
     pub fn print_board(&self) {
         for (i, status) in self.board.iter().enumerate() {
             let symbol = match status {
@@ -64,16 +78,49 @@ impl MyBoard {
         }
     }
 
-    pub fn send_new_pos(&mut self) {
-        let mut x: usize = 0;
-        let mut y: usize = 0;
-        while self.fetch_cell(x, y) != Status::Empty {
-            x = x + 1;
-            if x > self.size - 1 {
-                x = 0;
-                y = y + 1;
+    pub fn calculate_next_move(&self) -> (usize, usize) {
+        let root = self.generate_tree();
+        let mut best_move = &Move {
+            move_position: usize::MAX,
+            next_moves: vec![],
+        };
+        let mut best_move_value: u32 = 0;
+
+        for child in &root.next_moves {
+            let move_value = self.evaluate_board(child);
+            if move_value > best_move_value {
+                best_move_value = move_value;
+                best_move = child;
             }
         }
+        self.index_to_coordinates(best_move.move_position)
+    }
+
+    fn generate_tree(&self) -> Move {
+        let mut root = Move {
+            move_position: usize::MAX,
+            next_moves: Vec::new(),
+        };
+
+        for (index, status) in self.board.iter().enumerate() {
+            if *status == Status::Empty {
+                let child_move = Move {
+                    move_position: index,
+                    next_moves: Vec::new(),
+                };
+                root.next_moves.push(child_move);
+            }
+        }
+        return root;
+    }
+
+    fn evaluate_board(&self, _move: &Move) -> u32 {
+        return 10; // Fixed evaluation value for now
+    }
+
+    pub fn send_new_pos(&mut self) {
+        let (x, y) = self.calculate_next_move();
+
         self.set_cell(x, y, Status::Ally);
         println!("{},{}", x, y);
     }
