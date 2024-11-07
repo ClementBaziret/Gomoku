@@ -1,10 +1,17 @@
-use crate::my_board::{CellType, MyBoard};
-use std::io;
+use crate::my_board::{MyBoard, CellType};
+use std::io::Write;
+use std::process;
+use std::{fs::File, io};
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct MyAI {
     pub my_board: MyBoard,
     pub begin: bool,
+
+    #[cfg(debug_assertions)]
+    pub input_file: File,
+    #[cfg(debug_assertions)]
+    pub output_file: File,
 }
 
 enum LogType {
@@ -27,9 +34,23 @@ impl LogType {
 
 impl MyAI {
     pub fn new() -> Self {
+        let pid = process::id();
+
+        #[cfg(debug_assertions)]
+        let input_file = File::create(format!("input_{}.txt", pid))
+            .expect("Failed to create input file in debug mode");
+        #[cfg(debug_assertions)]
+        let output_file = File::create(format!("output_{}.txt", pid))
+            .expect("Failed to create output file in debug mode");
+
         MyAI {
             my_board: MyBoard::new(),
             begin: true,
+
+            #[cfg(debug_assertions)]
+            input_file,
+            #[cfg(debug_assertions)]
+            output_file,
         }
     }
 
@@ -182,6 +203,8 @@ impl MyAI {
             input.clear();
             let n = io::stdin().read_line(&mut input)?;
 
+            self.write_to_input_file(&input);
+
             if n == 0 {
                 break;
             }
@@ -191,5 +214,15 @@ impl MyAI {
             }
         }
         Ok(())
+    }
+
+    pub fn write_to_input_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
+        let _res = write!(self.input_file, "{}", mes);
+    }
+
+    pub fn write_to_output_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
+        let _res = write!(self.output_file, "{}", mes);
     }
 }
