@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 /// Enumerates the two possible stone types
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Stone {
@@ -48,10 +50,10 @@ pub enum GameType {
     NetworkTournament,
 }
 
-impl TryFrom<&str> for GameType {
-    type Error = &'static str;
+impl FromStr for GameType {
+    type Err = &'static str;
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
         match value {
             "0" => Ok(Self::Human),
             "1" => Ok(Self::Brain),
@@ -74,7 +76,7 @@ fn cell_is_one_byte() {
 
 #[test]
 fn build_game_type_from_string() {
-    let game_type: Result<GameType, _> = "2".try_into();
-    
+    let game_type: Result<GameType, _> = "2".parse();
+
     assert_eq!(game_type, Ok(GameType::Tournament));
 }
