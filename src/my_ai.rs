@@ -35,18 +35,19 @@ impl MyAI {
 
     fn handle_about(&mut self, _cmd: &str) -> bool {
         let bot_name = "my AI";
+
         println!("name=\"{}\", version=\"1.0\", author=\"Nymand\", country=\"USA\"", bot_name);
         false
     }
 
     fn handle_start(&mut self, cmd: &str) -> bool {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
-
         if let Some(&number_str) = parse.get(1) {
-            if let Ok(_size) = number_str.parse::<usize>() {
-                // self.my_board.resize(size);
-                // self.my_board.size = size;
-                // I don't know what to do of this
+            if let Ok(size) = number_str.parse::<usize>() {
+                if size != 20 {
+                    println!("ERROR invalid size.");
+                    return false;
+                }
                 println!("OK");
                 return false;
             }
@@ -65,6 +66,11 @@ impl MyAI {
     fn handle_begin(&mut self, _cmd: &str) -> bool {
         self.begin = true;
         self.my_board.send_new_pos();
+        false
+    }
+
+    fn handle_print(&mut self, _cmd: &str) -> bool {
+        self.my_board.print_board();
         false
     }
 
@@ -150,7 +156,6 @@ impl MyAI {
         let uppercase =
             cmd.split_whitespace().next().unwrap().to_uppercase();
         let token = uppercase.as_str();
-
         match token {
             "ABOUT" => self.handle_about(&cmd),
             "START" => self.handle_start(&cmd),
@@ -159,6 +164,7 @@ impl MyAI {
             "BEGIN" => self.handle_begin(&cmd),
             "TURN" => self.handle_turn(&cmd),
             "BOARD" => self.handle_board(&cmd),
+            "PRINT" => self.handle_print(&cmd),
             _ => {
                 self.send_log(
                     LogType::Unknown,

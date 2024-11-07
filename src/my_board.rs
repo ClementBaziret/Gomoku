@@ -35,7 +35,7 @@ impl MyBoard {
         }
     }
 
-    pub fn print(&self) {
+    pub fn print_board(&self) {
         for y in self.board.iter() {
             for x in y.iter() {
                 let symbol = match x {
@@ -106,6 +106,6 @@ impl MyBoard {
         let (x, y) = self.calculate_next_move();
 
         self.board[y as usize][x as usize] = CellType::Ally;
-        println!("{}, {}", x, y);
+        println!("{},{}", x, y);
     }
 }
