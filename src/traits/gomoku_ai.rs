@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 use crate::model::{GameType, Stone};
 
@@ -20,6 +20,11 @@ pub trait GomokuAI<CellType, IndexType = usize> {
     /// - Return the move it decided to play
     /// - Update its internal board to remember it played the move
     fn play(&mut self) -> (IndexType, IndexType);
+
+    /// The manager asks the AI for information about itself.
+    ///
+    /// Commonly defined fields are name, version, author, country, www, email
+    fn about(&self) -> &HashMap<String, String>;
 
     /// Reset the board to any content.
     ///
