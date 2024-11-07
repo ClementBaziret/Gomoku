@@ -1,5 +1,6 @@
 mod my_ai;
 mod my_board;
+mod model;
 
 use my_ai::MyAI;
 
