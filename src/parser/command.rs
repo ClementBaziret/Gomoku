@@ -6,7 +6,7 @@ use crate::model::{CellContent, GameType};
 ///
 /// Refer to the complete piskwork protocol specification
 /// for complete documentation of all the commands.
-pub enum Command<'a, IndexType> {
+pub enum Command<IndexType> {
     /// Request to start a game
     Start(IndexType),
 
@@ -22,12 +22,12 @@ pub enum Command<'a, IndexType> {
     ///
     /// The result board will only contain stones in slots
     /// passed in parameters, all other slots are empty.
-    Board(&'a [(IndexType, IndexType, CellContent)]),
+    Board(Vec<(IndexType, IndexType, CellContent)>),
 
     /// Request of some information by the manager to the AI
     ///
     /// See [`InfoRequest`]
-    Info(InfoRequest<'a, IndexType>),
+    Info(InfoRequest<IndexType>),
 
     /// Indication to the AI that the game is over
     End,
@@ -39,7 +39,7 @@ pub enum Command<'a, IndexType> {
 /// Specific information requested to the AI by the manager
 ///
 /// See [`Command::Info`]
-pub enum InfoRequest<'a, IndexType> {
+pub enum InfoRequest<IndexType> {
     /// Indicates the maximum thinking time of an AI per turn
     /// 
     /// A timeout of zero means play as fast as possible.
@@ -87,6 +87,6 @@ pub enum InfoRequest<'a, IndexType> {
     /// The AI should place its files in a subfolder within this folder,
     /// to avoid collision with other AIs playing at the same time.
     /// This subfolder should have the name of the AI executable program.
-    Folder(&'a Path),
+    Folder(Box<Path>),
 }
 
