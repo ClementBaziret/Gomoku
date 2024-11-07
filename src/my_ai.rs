@@ -193,7 +193,6 @@ impl MyAI {
             input.clear();
             let n = io::stdin().read_line(&mut input)?;
 
-            #[cfg(debug_assertions)]
             self.write_to_input_file(&input);
 
             if n == 0 {
@@ -207,13 +206,13 @@ impl MyAI {
         Ok(())
     }
 
-    #[cfg(debug_assertions)]
     pub fn write_to_input_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
         let _res = write!(self.input_file, "{}", mes);
     }
 
-    #[cfg(debug_assertions)]
     pub fn write_to_output_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
         let _res = write!(self.output_file, "{}", mes);
     }
 }
