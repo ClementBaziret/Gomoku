@@ -48,14 +48,16 @@ pub enum GameType {
     NetworkTournament,
 }
 
-impl GameType {
-    fn from_string(option: &str) -> Option<Self> {
-        match option {
-            "0" => Some(Self::Human),
-            "1" => Some(Self::Brain),
-            "2" => Some(Self::Tournament),
-            "3" => Some(Self::NetworkTournament),
-            _ => None,
+impl TryFrom<&str> for GameType {
+    type Error = &'static str;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value {
+            "0" => Ok(Self::Human),
+            "1" => Ok(Self::Brain),
+            "2" => Ok(Self::Tournament),
+            "3" => Ok(Self::NetworkTournament),
+            _ => Err("Invalid value, only accepting 0-3"),
         }
     }
 }
@@ -68,4 +70,11 @@ fn stone_is_one_byte() {
 #[test]
 fn cell_is_one_byte() {
     assert_eq!(std::mem::size_of::<CellContent>(), 1);
+}
+
+#[test]
+fn build_game_type_from_string() {
+    let game_type: Result<GameType, _> = "2".try_into();
+    
+    assert_eq!(game_type, Ok(GameType::Tournament));
 }
