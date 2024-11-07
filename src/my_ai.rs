@@ -1,4 +1,4 @@
-use crate::my_board::{MyBoard, Status};
+use crate::my_board::{MyBoard, CellType};
 use std::io::Write;
 use std::process;
 use std::{fs::File, io};
@@ -69,8 +69,6 @@ impl MyAI {
                     println!("ERROR invalid size.");
                     return false;
                 }
-                self.my_board.resize(20);
-                self.my_board.size = 20;
                 println!("OK");
                 return false;
             }
@@ -115,7 +113,7 @@ impl MyAI {
                 }
             }
         }
-        self.my_board.set_cell(x, y, Status::Enemy);
+        self.my_board.board[y as usize][x as usize] = CellType::Enemy;
         self.my_board.send_new_pos();
         false
     }
@@ -159,9 +157,11 @@ impl MyAI {
                 }
             };
             if player == 1 {
-                self.my_board.set_cell(x, y, Status::Ally);
+                self.my_board.board[y as usize][x as usize] =
+                    CellType::Ally;
             } else {
-                self.my_board.set_cell(x, y, Status::Enemy);
+                self.my_board.board[y as usize][x as usize] =
+                    CellType::Enemy;
             }
         }
         self.my_board.send_new_pos();
