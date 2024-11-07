@@ -1,14 +1,13 @@
-
 /// Enumerates the two possible stone types
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Stone {
     /// Stone placed by the current player.
-    /// 
+    ///
     /// Defined as numerical value 1 in the piskwork protocol
     Ally = 1,
 
     /// Stone placed by the opponent player.
-    /// 
+    ///
     /// Defined as numerical value 2 in the piskwork protocol
     Opponent = 2,
 }
@@ -17,17 +16,17 @@ pub enum Stone {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellContent {
     /// No stone placed in this cell.
-    /// 
+    ///
     /// Defined as numerical value 0 in the piskwork protocol
     Empty = 0,
 
     /// Cell contains a stone placed by the current player.
-    /// 
+    ///
     /// See [`Stone::Ally`]
     Ally = Stone::Ally as isize,
 
     /// Cell contains a stone placed by the opponent player.
-    /// 
+    ///
     /// See [`Stone::Opponent`]
     Opponent = Stone::Opponent as isize,
 }
@@ -56,7 +55,7 @@ impl GameType {
             "1" => Some(Self::Brain),
             "2" => Some(Self::Tournament),
             "3" => Some(Self::NetworkTournament),
-            _ => None
+            _ => None,
         }
     }
 }

@@ -4,7 +4,6 @@ use crate::model::{GameType, Stone};
 
 /// Trait which defines possible interactions with a Gomoku AI
 pub trait GomokuAI<CellType, IndexType = usize> {
-
     /// Start the AI with a given square board size. The AI
     /// is allowed to refuse playing on with this board
     /// size, in which case it should return `None`.
@@ -13,7 +12,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
         Self: Sized;
 
     /// The manager informs the AI of a move made by the opponent.
-    /// 
+    ///
     /// The AI should update its internal board to remember the opponent move.
     fn receive_opponent_turn(pos: &(IndexType, IndexType));
 
@@ -23,7 +22,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
     fn play(&mut self) -> (IndexType, IndexType);
 
     /// Reset the board to any content.
-    /// 
+    ///
     /// Requires the AI to reset its internal board and then
     /// place the stones passed in parameter on it, effectively
     /// changing the entire state of the board to any possible
@@ -38,13 +37,13 @@ pub trait GomokuAI<CellType, IndexType = usize> {
 
     /// The managers asks for the AI to adapts its
     /// response time, zero means play as fast as possible
-    /// 
+    ///
     /// Time is represented in milliseconds.
     fn set_turn_timeout(&mut self, _time: i32) {}
 
     /// The managers informs the AI of the total match duration.
     /// Zero means unlimited time.
-    /// 
+    ///
     /// Time is represented in milliseconds.
     fn set_match_timeout(&mut self, _time: i32) {}
 
@@ -54,7 +53,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
 
     /// The manager informs the AI of the remaining time of the game.
     /// A value of 2147483647 (i32::MAX) means unlimited time
-    /// 
+    ///
     /// Time is represented in milliseconds
     fn set_time_left(&mut self, _time: i32) {}
 
@@ -65,7 +64,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
 
     /// The manager informs the AI of a folder path in which
     /// the AI can store persistent files.
-    /// 
+    ///
     /// It is to be noted that this folder will be shared
     /// by all AIs, thus each AI should create a subfolder
     /// with the same name as its executable name, and place
