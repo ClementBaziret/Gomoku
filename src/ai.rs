@@ -1,5 +1,5 @@
+use crate::board::Board;
 use crate::model::{CellContent, GameType, Stone};
-use crate::my_board::{CellType, MyBoard};
 use crate::traits::GomokuAI;
 use std::io::Write;
 use std::path::Path;
@@ -7,8 +7,8 @@ use std::process;
 use std::{fs::File, io};
 
 #[derive(Debug)]
-pub struct MyAI {
-    pub my_board: MyBoard,
+pub struct Ai {
+    pub my_board: Board,
     pub begin: bool,
 
     #[cfg(debug_assertions)]
@@ -35,9 +35,9 @@ impl LogType {
     }
 }
 
-impl GomokuAI<u8> for MyAI {
+impl GomokuAI<u8> for Ai {
     fn start(board_size: u8) -> Option<Self> {
-        let ai = MyAI::new();
+        let ai = Ai::new();
 
         if ai.my_board.size != board_size {
             return None;
@@ -55,7 +55,7 @@ impl GomokuAI<u8> for MyAI {
     }
 
     fn about(&self) -> &[(&str, &str)] {
-        &MyAI::ABOUT_MAP
+        &Ai::ABOUT_MAP
     }
 
     fn set_board(&mut self, stones: &[(u8, u8, Stone)]) {
@@ -87,7 +87,7 @@ impl GomokuAI<u8> for MyAI {
     fn set_persistent_folder(&mut self, _path: &Path) {}
 }
 
-impl MyAI {
+impl Ai {
     const ABOUT_MAP: [(&'static str, &'static str); 4] = [
         ("name", "MyAi"),
         ("version", "0.1"),
@@ -105,8 +105,8 @@ impl MyAI {
         let output_file = File::create(format!("output_{}.txt", pid))
             .expect("Failed to create output file in debug mode");
 
-        MyAI {
-            my_board: MyBoard::new(),
+        Ai {
+            my_board: Board::new(),
             begin: true,
 
             #[cfg(debug_assertions)]
@@ -175,7 +175,8 @@ impl MyAI {
                 }
             }
         }
-        self.my_board.board[y as usize][x as usize] = CellType::Enemy;
+        self.my_board.board[y as usize][x as usize] =
+            CellContent::Opponent;
         self.my_board.send_new_pos();
         false
     }
@@ -220,10 +221,10 @@ impl MyAI {
             };
             if player == 1 {
                 self.my_board.board[y as usize][x as usize] =
-                    CellType::Ally;
+                    CellContent::Ally;
             } else {
                 self.my_board.board[y as usize][x as usize] =
-                    CellType::Enemy;
+                    CellContent::Opponent;
             }
         }
         self.my_board.send_new_pos();

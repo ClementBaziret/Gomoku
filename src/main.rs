@@ -1,12 +1,12 @@
+mod ai;
+mod board;
 mod model;
-mod my_ai;
-mod my_board;
 mod traits;
 
-use my_ai::MyAI;
+use ai::Ai;
 
 fn main() -> std::io::Result<()> {
-    let mut ai = MyAI::new();
+    let mut ai = Ai::new();
 
     ai.start_loop()
 }
