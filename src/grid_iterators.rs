@@ -126,7 +126,12 @@ impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator for UpRightDiagona
 
 #[test]
 fn test_column_iterator() {
-    let test_grid = [[1, 4, 7], [2, 5, 8], [3, 6, 9]];
+    #[rustfmt::skip]
+    let test_grid = [
+        [1, 4, 7],
+        [2, 5, 8],
+        [3, 6, 9],
+    ];
 
     let mut col_it = GridColumnIterator::new(&test_grid, 0);
 
@@ -145,7 +150,12 @@ fn test_column_iterator() {
 
 #[test]
 fn test_columns_iterator() {
-    let test_grid = [[1, 4, 7], [2, 5, 8], [3, 6, 9]];
+    #[rustfmt::skip]
+    let test_grid = [
+        [1, 4, 7],
+        [2, 5, 8],
+        [3, 6, 9]
+    ];
     let mut expected = 0;
 
     for col in GridColumns::new(&test_grid) {
