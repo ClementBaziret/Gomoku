@@ -63,6 +63,11 @@ impl Parser {
         let _res = write!(self.output_file, "{}", mes);
     }
 
+    fn send_play(&mut self) {
+        let play = self.ai.play();
+        println!("{},{}", play.0, play.1);
+    }
+
     fn handle_about(&mut self, _cmd: &str) -> bool {
         for info in self.ai.about() {
             print!("{}=\"{}\", ", info.0, info.1);
@@ -99,8 +104,7 @@ impl Parser {
     }
 
     fn handle_begin(&mut self, _cmd: &str) -> bool {
-        let play = self.ai.play();
-        println!("{},{}", play.0, play.1);
+        self.send_play();
 
         false
     }
@@ -129,11 +133,8 @@ impl Parser {
                 }
             }
         }
-        self.ai.board.board[y as usize][x as usize] =
-            CellContent::Opponent;
-        // self.ai.receive_opponent_turn();
-        let play = self.ai.play();
-        println!("{},{}", play.0, play.1);
+        self.ai.receive_opponent_turn(&(y as u8, x as u8));
+        self.send_play();
 
         false
     }
@@ -184,8 +185,7 @@ impl Parser {
                     CellContent::Opponent;
             }
         }
-        let play = self.ai.play();
-        println!("{},{}", play.0, play.1);
+        self.send_play();
 
         false
     }
