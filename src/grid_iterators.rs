@@ -107,17 +107,61 @@ impl<'a, T, const W: usize, const H: usize>
     }
 }
 
-impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator for UpRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT> {
+impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
+    for UpRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT>
+{
     type Item = &'a T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.y == usize::MAX || self.x > WIDTH {
+        if self.y == usize::MAX || self.x >= WIDTH {
             None
         } else {
             let ret = &self.inner_grid[self.y][self.x];
 
-            self.y = usize::wrapping_sub(self.y, 1);
+            self.y = self.y.wrapping_sub(1);
             self.x += 1;
+
+            Some(ret)
+        }
+    }
+}
+
+struct GridUpRightDiagonals<
+    'a,
+    T,
+    const WIDTH: usize,
+    const HEIGHT: usize,
+> {
+    inner_grid: &'a [[T; WIDTH]; HEIGHT],
+    current_diag: usize,
+}
+
+impl<'a, T, const W: usize, const H: usize>
+    GridUpRightDiagonals<'a, T, W, H>
+{
+    pub fn new(grid: &'a [[T; W]; H]) -> Self {
+        Self {
+            inner_grid: grid,
+            current_diag: 0,
+        }
+    }
+}
+
+impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
+    for GridUpRightDiagonals<'a, T, WIDTH, HEIGHT>
+{
+    type Item = UpRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current_diag >= WIDTH + HEIGHT - 1 {
+            None
+        } else {
+            let ret = UpRightDiagonalGridIterator::new(
+                self.inner_grid,
+                self.current_diag,
+            );
+
+            self.current_diag += 1;
 
             Some(ret)
         }
@@ -174,4 +218,27 @@ fn test_one_column_iterator() {
     for val in UpRightDiagonalGridIterator::new(&test_grid, 2) {
         assert_eq!(*val, 1);
     }
+}
+
+#[test]
+fn test_upright_diagonals_iterator() {
+    #[rustfmt::skip]
+    let test_grid = [
+        [1, 3, 6],
+        [2, 5, 8],
+        [4, 7, 9],
+    ];
+
+    let mut expected = 0;
+    let mut diag_count = 0;
+
+    for diag in GridUpRightDiagonals::new(&test_grid) {
+        diag_count += 1;
+        for val in diag {
+            expected += 1;
+            assert_eq!(expected, *val);
+        }
+    }
+    assert_eq!(expected, 9);
+    assert_eq!(diag_count, 5);
 }
