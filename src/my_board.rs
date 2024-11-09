@@ -1,23 +1,8 @@
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum CellType {
-    Empty,
-    Enemy,
-    Ally,
-}
-
-impl CellType {
-    pub fn to_str(&self) -> &str {
-        match self {
-            Self::Empty => "Empty",
-            Self::Enemy => "Enemy",
-            Self::Ally => "Ally",
-        }
-    }
-}
+use crate::model::CellContent;
 
 #[derive(Debug, Clone)]
 pub struct MyBoard {
-    pub board: [[CellType; 20]; 20],
+    pub board: [[CellContent; 20]; 20],
     pub size: u8,
 }
 
@@ -30,7 +15,7 @@ struct Move {
 impl MyBoard {
     pub fn new() -> Self {
         MyBoard {
-            board: [[CellType::Empty; 20]; 20],
+            board: [[CellContent::Empty; 20]; 20],
             size: 20,
         }
     }
@@ -39,9 +24,9 @@ impl MyBoard {
         for y in self.board.iter() {
             for x in y.iter() {
                 let symbol = match x {
-                    CellType::Empty => '.',
-                    CellType::Enemy => 'X',
-                    CellType::Ally => 'O',
+                    CellContent::Empty => '.',
+                    CellContent::Opponent => 'X',
+                    CellContent::Ally => 'O',
                 };
                 print!("{} ", symbol);
             }
@@ -50,7 +35,7 @@ impl MyBoard {
     }
 
     pub fn clear_board(&mut self) {
-        self.board = [[CellType::Empty; 20]; 20];
+        self.board = [[CellContent::Empty; 20]; 20];
     }
 
     pub fn calculate_next_move(&self) -> (u8, u8) {
@@ -84,7 +69,7 @@ impl MyBoard {
         for y in 0..self.size {
             for x in 0..self.size {
                 if self.board[y as usize][x as usize]
-                    == CellType::Empty
+                    == CellContent::Empty
                 {
                     let child_move = Move {
                         x,
@@ -102,10 +87,11 @@ impl MyBoard {
         return 10; // Fixed evaluation value for now
     }
 
-    pub fn send_new_pos(&mut self) {
+    pub fn send_new_pos(&mut self) -> (u8, u8) {
         let (x, y) = self.calculate_next_move();
 
-        self.board[y as usize][x as usize] = CellType::Ally;
-        println!("{},{}", x, y);
+        self.board[y as usize][x as usize] = CellContent::Ally;
+        // println!("{},{}", x, y);
+        (x, y)
     }
 }
