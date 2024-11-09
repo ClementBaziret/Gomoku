@@ -72,9 +72,7 @@ impl Parser {
         for info in self.ai.about() {
             print!("{}=\"{}\", ", info.0, info.1);
         }
-        // println!();
         print!("\n");
-        // println!("name=\"{}\", version=\"1.0\", author=\"Nymand\", country=\"USA\"", bot_name);
         false
     }
 
