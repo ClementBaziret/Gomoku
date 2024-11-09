@@ -1,15 +1,15 @@
 use crate::model::CellContent;
 
-#[derive(Debug, Clone)]
-pub struct Board {
-    pub board: [[CellContent; 20]; 20],
-    pub size: u8,
-}
-
 struct Move {
     x: u8,
     y: u8,
     next_moves: Vec<Move>,
+}
+
+#[derive(Debug, Clone)]
+pub struct Board {
+    pub board: [[CellContent; 20]; 20],
+    pub size: u8,
 }
 
 impl Board {
@@ -91,7 +91,6 @@ impl Board {
         let (x, y) = self.calculate_next_move();
 
         self.board[y as usize][x as usize] = CellContent::Ally;
-        println!("{},{}", x, y);
         (x, y)
     }
 }

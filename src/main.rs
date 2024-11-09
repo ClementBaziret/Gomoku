@@ -1,12 +1,13 @@
 mod ai;
 mod board;
 mod model;
+mod parser;
 mod traits;
 
-use ai::Ai;
+use parser::Parser;
 
 fn main() -> std::io::Result<()> {
-    let mut ai = Ai::new();
+    let mut parser = Parser::new();
 
-    ai.start_loop()
+    parser.start_loop()
 }
