@@ -12,7 +12,7 @@ struct GridColumnIterator<
 impl<'a, T, const W: usize, const H: usize>
     GridColumnIterator<'a, T, W, H>
 {
-    fn new(grid: &'a [[T; W]; H], col: usize) -> Self {
+    pub fn new(grid: &'a [[T; W]; H], col: usize) -> Self {
         Self {
             inner_grid: grid,
             selected_col: col,
@@ -39,7 +39,7 @@ impl<'a, T, const W: usize, const HEIGHT: usize> Iterator
 }
 
 impl<'a, T, const W: usize, const H: usize> GridColumns<'a, T, W, H> {
-    fn new(grid: &'a [[T; W]; H]) -> Self {
+    pub fn new(grid: &'a [[T; W]; H]) -> Self {
         Self {
             inner_grid: grid,
             current_column: 0,
@@ -67,6 +67,57 @@ impl<'a, T, const WIDTH: usize, const H: usize> Iterator
             );
 
             self.current_column += 1;
+
+            Some(ret)
+        }
+    }
+}
+
+struct UpRightDiagonalGridIterator<
+    'a,
+    T,
+    const WIDTH: usize,
+    const HEIGHT: usize,
+> {
+    inner_grid: &'a [[T; WIDTH]; HEIGHT],
+    x: usize,
+    y: usize,
+}
+
+impl<'a, T, const W: usize, const H: usize>
+    UpRightDiagonalGridIterator<'a, T, W, H>
+{
+    pub fn new(grid: &'a [[T; W]; H], diagonal: usize) -> Self {
+        if diagonal > H + W - 1 {
+            panic!();
+        }
+        if diagonal < H {
+            Self {
+                inner_grid: grid,
+                x: 0,
+                y: diagonal,
+            }
+        } else {
+            Self {
+                inner_grid: grid,
+                x: diagonal + 1 - H,
+                y: H - 1,
+            }
+        }
+    }
+}
+
+impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator for UpRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.y == usize::MAX || self.x > WIDTH {
+            None
+        } else {
+            let ret = &self.inner_grid[self.y][self.x];
+
+            self.y = usize::wrapping_sub(self.y, 1);
+            self.x += 1;
 
             Some(ret)
         }
@@ -104,4 +155,13 @@ fn test_columns_iterator() {
         }
     }
     assert_eq!(expected, 9);
+}
+
+#[test]
+fn test_one_column_iterator() {
+    let test_grid = [[0, 0, 1], [0, 1, 0], [1, 0, 0]];
+
+    for val in UpRightDiagonalGridIterator::new(&test_grid, 2) {
+        assert_eq!(*val, 1);
+    }
 }
