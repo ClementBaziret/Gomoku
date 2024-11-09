@@ -168,6 +168,101 @@ impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
     }
 }
 
+struct DownRightDiagonalGridIterator<
+    'a,
+    T,
+    const WIDTH: usize,
+    const HEIGHT: usize,
+> {
+    inner_grid: &'a [[T; WIDTH]; HEIGHT],
+    x: usize,
+    y: usize,
+}
+
+impl<'a, T, const W: usize, const H: usize>
+    DownRightDiagonalGridIterator<'a, T, W, H>
+{
+    pub fn new(grid: &'a [[T; W]; H], diagonal: usize) -> Self {
+        if diagonal > H + W - 1 {
+            panic!();
+        }
+        if diagonal < H {
+            Self {
+                inner_grid: grid,
+                x: 0,
+                y: H - 1 - diagonal,
+            }
+        } else {
+            Self {
+                inner_grid: grid,
+                x: diagonal - (H - 1),
+                y: 0,
+            }
+        }
+    }
+}
+
+impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
+    for DownRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT>
+{
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.y >= HEIGHT || self.x >= WIDTH {
+            None
+        } else {
+            let ret = &self.inner_grid[self.y][self.x];
+
+            self.y += 1;
+            self.x += 1;
+
+            Some(ret)
+        }
+    }
+}
+
+struct GridDownRightDiagonals<
+    'a,
+    T,
+    const WIDTH: usize,
+    const HEIGHT: usize,
+> {
+    inner_grid: &'a [[T; WIDTH]; HEIGHT],
+    current_diag: usize,
+}
+
+impl<'a, T, const W: usize, const H: usize>
+    GridDownRightDiagonals<'a, T, W, H>
+{
+    pub fn new(grid: &'a [[T; W]; H]) -> Self {
+        Self {
+            inner_grid: grid,
+            current_diag: 0,
+        }
+    }
+}
+
+impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
+    for GridDownRightDiagonals<'a, T, WIDTH, HEIGHT>
+{
+    type Item = DownRightDiagonalGridIterator<'a, T, WIDTH, HEIGHT>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current_diag >= WIDTH + HEIGHT - 1 {
+            None
+        } else {
+            let ret = DownRightDiagonalGridIterator::new(
+                self.inner_grid,
+                self.current_diag,
+            );
+
+            self.current_diag += 1;
+
+            Some(ret)
+        }
+    }
+}
+
 #[test]
 fn test_column_iterator() {
     #[rustfmt::skip]
@@ -233,6 +328,29 @@ fn test_upright_diagonals_iterator() {
     let mut diag_count = 0;
 
     for diag in GridUpRightDiagonals::new(&test_grid) {
+        diag_count += 1;
+        for val in diag {
+            expected += 1;
+            assert_eq!(expected, *val);
+        }
+    }
+    assert_eq!(expected, 9);
+    assert_eq!(diag_count, 5);
+}
+
+#[test]
+fn test_downright_diagonals_iterator() {
+    #[rustfmt::skip]
+    let test_grid = [
+        [4, 7, 9],
+        [2, 5, 8],
+        [1, 3, 6],
+    ];
+
+    let mut expected = 0;
+    let mut diag_count = 0;
+
+    for diag in GridDownRightDiagonals::new(&test_grid) {
         diag_count += 1;
         for val in diag {
             expected += 1;
