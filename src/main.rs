@@ -3,6 +3,7 @@ mod my_ai;
 mod my_board;
 mod traits;
 mod evaluation;
+mod grid_iterators;
 
 use my_ai::MyAI;
 
