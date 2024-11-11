@@ -1,3 +1,5 @@
+use crate::evaluation::evaluate;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum CellType {
     Empty,
@@ -21,10 +23,10 @@ pub struct MyBoard {
     pub size: u8,
 }
 
-struct Move {
-    x: u8,
-    y: u8,
-    next_moves: Vec<Move>,
+pub struct Move {
+    pub x: u8,
+    pub y: u8,
+    pub next_moves: Vec<Move>,
 }
 
 impl MyBoard {
@@ -61,10 +63,10 @@ impl MyBoard {
             y: u8::MAX,
             next_moves: vec![],
         };
-        let mut best_move_value: u32 = 0;
+        let mut best_move_value: i32 = 0;
 
         for child in &root.next_moves {
-            let move_value = self.evaluate_board(child);
+            let move_value = self.evaluate_board();
             if move_value > best_move_value {
                 best_move_value = move_value;
                 best_move = child;
@@ -98,8 +100,11 @@ impl MyBoard {
         root
     }
 
-    fn evaluate_board(&self, _move: &Move) -> u32 {
-        return 10; // Fixed evaluation value for now
+    fn evaluate_board(&self) -> i32 {
+        let ret = evaluate(self);
+        println!("{}", ret);
+        // self.print_board();
+        ret
     }
 
     pub fn send_new_pos(&mut self) {

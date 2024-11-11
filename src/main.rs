@@ -2,6 +2,7 @@ mod model;
 mod my_ai;
 mod my_board;
 mod traits;
+mod evaluation;
 
 use my_ai::MyAI;
 

@@ -208,7 +208,6 @@ impl MyAI {
             if n == 0 {
                 break;
             }
-
             if self.handle_command(&input) {
                 break;
             }
