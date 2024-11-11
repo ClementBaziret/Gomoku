@@ -32,8 +32,8 @@ impl GomokuAI<u8> for Ai {
         Some(ai)
     }
 
-    fn receive_opponent_turn(&mut self, pos: &(u8, u8)) {
-        self.board.board[pos.0 as usize][pos.1 as usize] =
+    fn receive_opponent_turn(&mut self, (x, y): &(u8, u8)) {
+        self.board.board[*y as usize][*x as usize] =
             CellContent::Opponent;
     }
 

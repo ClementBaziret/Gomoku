@@ -131,7 +131,7 @@ impl Parser {
                 }
             }
         }
-        self.ai.receive_opponent_turn(&(y as u8, x as u8));
+        self.ai.receive_opponent_turn(&(x as u8, y as u8));
         self.send_play();
 
         false
