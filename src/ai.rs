@@ -1,7 +1,6 @@
 use crate::board::Board;
-use crate::model::{CellContent, GameType, Stone};
+use crate::model::{CellContent, Stone};
 use crate::traits::GomokuAI;
-use std::path::Path;
 
 pub struct Ai {
     pub board: Board,

@@ -1,5 +1,3 @@
-use std::cell::Cell;
-
 use crate::model::CellContent;
 use crate::{
     board::Board,

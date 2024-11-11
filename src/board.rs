@@ -1,5 +1,3 @@
-use std::cmp::min;
-
 use crate::evaluation::evaluate;
 use crate::model::CellContent;
 

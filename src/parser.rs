@@ -1,4 +1,3 @@
-use crate::board::Board;
 use crate::model::CellContent;
 use std::io::Write;
 use std::process;
