@@ -1,3 +1,5 @@
+use std::cmp::min;
+
 use crate::evaluation::evaluate;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -63,7 +65,7 @@ impl MyBoard {
             y: u8::MAX,
             next_moves: vec![],
         };
-        let mut best_move_value: i32 = 0;
+        let mut best_move_value: i32 = i32::MIN;
 
         for child in &root.next_moves {
             let move_value = self.evaluate_board();
@@ -102,8 +104,6 @@ impl MyBoard {
 
     fn evaluate_board(&self) -> i32 {
         let ret = evaluate(self);
-        println!("{}", ret);
-        // self.print_board();
         ret
     }
 

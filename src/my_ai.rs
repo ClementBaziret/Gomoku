@@ -1,4 +1,4 @@
-use crate::my_board::{MyBoard, CellType};
+use crate::my_board::{CellType, MyBoard};
 use std::io::Write;
 use std::process;
 use std::{fs::File, io};
