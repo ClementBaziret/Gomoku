@@ -47,7 +47,8 @@ impl<'a, T, const W: usize, const H: usize> GridColumns<'a, T, W, H> {
     }
 }
 
-pub struct GridColumns<'a, T, const WIDTH: usize, const HEIGHT: usize> {
+pub struct GridColumns<'a, T, const WIDTH: usize, const HEIGHT: usize>
+{
     inner_grid: &'a [[T; WIDTH]; HEIGHT],
     current_column: usize,
 }

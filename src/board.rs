@@ -1,29 +1,7 @@
 use std::cmp::min;
 
 use crate::evaluation::evaluate;
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum CellType {
-    Empty,
-    Enemy,
-    Ally,
-}
-
-impl CellType {
-    pub fn to_str(&self) -> &str {
-        match self {
-            Self::Empty => "Empty",
-            Self::Enemy => "Enemy",
-            Self::Ally => "Ally",
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct MyBoard {
-    pub board: [[CellType; 20]; 20],
-    pub size: u8,
-}
+use crate::model::CellContent;
 
 pub struct Move {
     pub x: u8,
@@ -31,10 +9,16 @@ pub struct Move {
     pub next_moves: Vec<Move>,
 }
 
-impl MyBoard {
+#[derive(Debug, Clone)]
+pub struct Board {
+    pub board: [[CellContent; 20]; 20],
+    pub size: u8,
+}
+
+impl Board {
     pub fn new() -> Self {
-        MyBoard {
-            board: [[CellType::Empty; 20]; 20],
+        Board {
+            board: [[CellContent::Empty; 20]; 20],
             size: 20,
         }
     }
@@ -43,9 +27,9 @@ impl MyBoard {
         for y in self.board.iter() {
             for x in y.iter() {
                 let symbol = match x {
-                    CellType::Empty => '.',
-                    CellType::Enemy => 'X',
-                    CellType::Ally => 'O',
+                    CellContent::Empty => '.',
+                    CellContent::Opponent => 'X',
+                    CellContent::Ally => 'O',
                 };
                 print!("{} ", symbol);
             }
@@ -54,7 +38,7 @@ impl MyBoard {
     }
 
     pub fn clear_board(&mut self) {
-        self.board = [[CellType::Empty; 20]; 20];
+        self.board = [[CellContent::Empty; 20]; 20];
     }
 
     pub fn calculate_next_move(&self) -> (u8, u8) {
@@ -91,7 +75,7 @@ impl MyBoard {
         for y in 0..self.size {
             for x in 0..self.size {
                 if self.board[y as usize][x as usize]
-                    == CellType::Empty
+                    == CellContent::Empty
                 {
                     let child_move = Move {
                         x,
@@ -123,7 +107,7 @@ impl MyBoard {
             for j in y_min..=y_max {
                 if (i != x || j != y)
                     && self.board[i as usize][j as usize]
-                        != CellType::Empty
+                        != CellContent::Empty
                 {
                     return false;
                 }
@@ -132,10 +116,10 @@ impl MyBoard {
         true
     }
 
-    pub fn send_new_pos(&mut self) {
+    pub fn send_new_pos(&mut self) -> (u8, u8) {
         let (x, y) = self.calculate_next_move();
 
-        self.board[y as usize][x as usize] = CellType::Ally;
-        println!("{},{}", x, y);
+        self.board[y as usize][x as usize] = CellContent::Ally;
+        (x, y)
     }
 }

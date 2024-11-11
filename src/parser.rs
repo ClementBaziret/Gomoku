@@ -1,12 +1,14 @@
-use crate::my_board::{CellType, MyBoard};
+use crate::board::Board;
+use crate::model::CellContent;
 use std::io::Write;
 use std::process;
 use std::{fs::File, io};
 
-#[derive(Debug)]
-pub struct MyAI {
-    pub my_board: MyBoard,
-    pub begin: bool,
+use crate::ai::Ai;
+use crate::traits::GomokuAI;
+
+pub struct Parser {
+    ai: Ai,
 
     #[cfg(debug_assertions)]
     pub input_file: File,
@@ -32,10 +34,10 @@ impl LogType {
     }
 }
 
-impl MyAI {
+impl Parser {
     pub fn new() -> Self {
+        #[cfg(debug_assertions)]
         let pid = process::id();
-
         #[cfg(debug_assertions)]
         let input_file = File::create(format!("input_{}.txt", pid))
             .expect("Failed to create input file in debug mode");
@@ -43,10 +45,8 @@ impl MyAI {
         let output_file = File::create(format!("output_{}.txt", pid))
             .expect("Failed to create output file in debug mode");
 
-        MyAI {
-            my_board: MyBoard::new(),
-            begin: true,
-
+        Parser {
+            ai: Ai::new(),
             #[cfg(debug_assertions)]
             input_file,
             #[cfg(debug_assertions)]
@@ -54,10 +54,26 @@ impl MyAI {
         }
     }
 
-    fn handle_about(&mut self, _cmd: &str) -> bool {
-        let bot_name = "my AI";
+    pub fn write_to_input_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
+        let _res = write!(self.input_file, "{}", mes);
+    }
 
-        println!("name=\"{}\", version=\"1.0\", author=\"Nymand\", country=\"USA\"", bot_name);
+    pub fn write_to_output_file(&mut self, mes: &str) {
+        #[cfg(debug_assertions)]
+        let _res = write!(self.output_file, "{}", mes);
+    }
+
+    fn send_play(&mut self) {
+        let play = self.ai.play();
+        println!("{},{}", play.0, play.1);
+    }
+
+    fn handle_about(&mut self, _cmd: &str) -> bool {
+        for info in self.ai.about() {
+            print!("{}=\"{}\", ", info.0, info.1);
+        }
+        print!("\n");
         false
     }
 
@@ -65,10 +81,12 @@ impl MyAI {
         let parse: Vec<&str> = cmd.split_whitespace().collect();
         if let Some(&number_str) = parse.get(1) {
             if let Ok(size) = number_str.parse::<usize>() {
-                if size != 20 {
+                if size != self.ai.board.size as usize {
+                    self.write_to_output_file("ERROR invalid size.");
                     println!("ERROR invalid size.");
                     return false;
                 }
+                self.write_to_output_file("OK");
                 println!("OK");
                 return false;
             }
@@ -85,13 +103,14 @@ impl MyAI {
     }
 
     fn handle_begin(&mut self, _cmd: &str) -> bool {
-        self.begin = true;
-        self.my_board.send_new_pos();
+        self.send_play();
+
         false
     }
 
     fn handle_print(&mut self, _cmd: &str) -> bool {
-        self.my_board.print_board();
+        self.ai.board.print_board();
+
         false
     }
 
@@ -113,14 +132,15 @@ impl MyAI {
                 }
             }
         }
-        self.my_board.board[y as usize][x as usize] = CellType::Enemy;
-        self.my_board.send_new_pos();
+        self.ai.receive_opponent_turn(&(x as u8, y as u8));
+        self.send_play();
+
         false
     }
 
     fn handle_board(&mut self, _cmd: &str) -> bool {
         let mut input = String::new();
-        self.my_board.clear_board();
+        self.ai.board.clear_board();
 
         loop {
             input.clear();
@@ -157,14 +177,15 @@ impl MyAI {
                 }
             };
             if player == 1 {
-                self.my_board.board[y as usize][x as usize] =
-                    CellType::Ally;
+                self.ai.board.board[y as usize][x as usize] =
+                    CellContent::Ally;
             } else {
-                self.my_board.board[y as usize][x as usize] =
-                    CellType::Enemy;
+                self.ai.board.board[y as usize][x as usize] =
+                    CellContent::Opponent;
             }
         }
-        self.my_board.send_new_pos();
+        self.send_play();
+
         false
     }
 
@@ -208,20 +229,14 @@ impl MyAI {
             if n == 0 {
                 break;
             }
+            if input == "\n" {
+                continue;
+            }
+
             if self.handle_command(&input) {
                 break;
             }
         }
         Ok(())
-    }
-
-    pub fn write_to_input_file(&mut self, mes: &str) {
-        #[cfg(debug_assertions)]
-        let _res = write!(self.input_file, "{}", mes);
-    }
-
-    pub fn write_to_output_file(&mut self, mes: &str) {
-        #[cfg(debug_assertions)]
-        let _res = write!(self.output_file, "{}", mes);
     }
 }
