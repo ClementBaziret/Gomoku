@@ -63,3 +63,25 @@ impl GomokuAI<u8> for Ai {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn basic_win() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (5, 3, Stone::Opponent),
+            (5, 4, Stone::Ally),
+            (5, 5, Stone::Ally),
+            (5, 6, Stone::Ally),
+            (5, 7, Stone::Ally),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert_eq!(ai_move, (5, 8));
+    }
+}
