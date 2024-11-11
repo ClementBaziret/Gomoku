@@ -69,7 +69,7 @@ impl MyBoard {
 
         for child in &root.next_moves {
             let mut move_value: i32 = 0;
-            if (self.too_far(child)) == true {
+            if (self.too_far(child)) == false {
                 move_value = self.evaluate_board();
             }
             if move_value > best_move_value {
