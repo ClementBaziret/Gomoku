@@ -68,7 +68,7 @@ impl MyBoard {
         let mut best_move_value: i32 = i32::MIN;
 
         for child in &root.next_moves {
-            let mut move_value: i32 = 0;
+            let mut move_value: i32 = -5;
             if (self.too_far(child)) == false {
                 move_value = self.evaluate_board();
             }
