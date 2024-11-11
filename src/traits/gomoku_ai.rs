@@ -1,9 +1,9 @@
-use std::{collections::HashMap, path::Path};
+use std::path::Path;
 
 use crate::model::{GameType, Stone};
 
 /// Trait which defines possible interactions with a Gomoku AI
-pub trait GomokuAI<CellType, IndexType = usize> {
+pub trait GomokuAI<IndexType = usize> {
     /// Start the AI with a given square board size. The AI
     /// is allowed to refuse playing on with this board
     /// size, in which case it should return `None`.
@@ -14,7 +14,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
     /// The manager informs the AI of a move made by the opponent.
     ///
     /// The AI should update its internal board to remember the opponent move.
-    fn receive_opponent_turn(pos: &(IndexType, IndexType));
+    fn receive_opponent_turn(&mut self, pos: &(IndexType, IndexType));
 
     /// This asks the AI to play its next turn:
     /// - Return the move it decided to play
@@ -24,7 +24,7 @@ pub trait GomokuAI<CellType, IndexType = usize> {
     /// The manager asks the AI for information about itself.
     ///
     /// Commonly defined fields are name, version, author, country, www, email
-    fn about(&self) -> &HashMap<String, String>;
+    fn about(&self) -> &[(&str, &str)];
 
     /// Reset the board to any content.
     ///

@@ -1,13 +1,14 @@
+mod ai;
+mod board;
 mod model;
-mod my_ai;
-mod my_board;
+mod parser;
 mod traits;
 mod grid_iterators;
 
-use my_ai::MyAI;
+use parser::Parser;
 
 fn main() -> std::io::Result<()> {
-    let mut ai = MyAI::new();
+    let mut parser = Parser::new();
 
-    ai.start_loop()
+    parser.start_loop()
 }
