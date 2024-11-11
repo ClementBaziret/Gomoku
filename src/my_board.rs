@@ -68,7 +68,10 @@ impl MyBoard {
         let mut best_move_value: i32 = i32::MIN;
 
         for child in &root.next_moves {
-            let move_value = self.evaluate_board();
+            let mut move_value: i32 = 0;
+            if (self.too_far(child)) == true {
+                move_value = self.evaluate_board();
+            }
             if move_value > best_move_value {
                 best_move_value = move_value;
                 best_move = child;
@@ -105,6 +108,28 @@ impl MyBoard {
     fn evaluate_board(&self) -> i32 {
         let ret = evaluate(self);
         ret
+    }
+
+    fn too_far(&self, pos: &Move) -> bool {
+        let x = pos.x as i32;
+        let y = pos.y as i32;
+
+        let x_min = (x - 2).max(0);
+        let x_max = (x + 2).min(self.size as i32 - 1);
+        let y_min = (y - 2).max(0);
+        let y_max = (y + 2).min(self.size as i32 - 1);
+
+        for i in x_min..=x_max {
+            for j in y_min..=y_max {
+                if (i != x || j != y)
+                    && self.board[i as usize][j as usize]
+                        != CellType::Empty
+                {
+                    return false;
+                }
+            }
+        }
+        true
     }
 
     pub fn send_new_pos(&mut self) {
