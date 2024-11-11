@@ -63,13 +63,4 @@ impl GomokuAI<u8> for Ai {
             }
         }
     }
-
-    fn begin(&mut self) {}
-    fn end(&mut self) {}
-    fn set_turn_timeout(&mut self, _time: i32) {}
-    fn set_match_timeout(&mut self, _time: i32) {}
-    fn set_max_memory(&mut self, _bytes: u64) {}
-    fn set_time_left(&mut self, _time: i32) {}
-    fn set_game_type(&mut self, _rule: GameType) {}
-    fn set_persistent_folder(&mut self, _path: &Path) {}
 }
