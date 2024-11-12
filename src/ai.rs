@@ -69,7 +69,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn basic_win() {
+    fn horizontal_win() {
         let mut ai = Ai::new();
 
         ai.set_board(&[
@@ -82,6 +82,54 @@ mod tests {
 
         let ai_move = ai.play();
 
-        assert_eq!(ai_move, (5, 8));
+        assert!(ai_move == (5, 2) || ai_move == (5, 8));
+    }
+
+    #[test]
+    fn vertical_win() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (1, 1, Stone::Ally),
+            (2, 1, Stone::Ally),
+            (3, 1, Stone::Ally),
+            (4, 1, Stone::Ally),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (0, 1) || ai_move == (5, 1));
+    }
+
+    #[test]
+    fn up_right_diagonal_win() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (5, 1, Stone::Ally),
+            (4, 2, Stone::Ally),
+            (3, 3, Stone::Ally),
+            (2, 4, Stone::Ally),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (6, 0) || ai_move == (1, 5));
+    }
+
+    #[test]
+    fn down_right_diagonal_win() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (1, 1, Stone::Ally),
+            (2, 2, Stone::Ally),
+            (3, 3, Stone::Ally),
+            (4, 4, Stone::Ally),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (0, 0) || ai_move == (5, 5));
     }
 }
