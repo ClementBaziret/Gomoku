@@ -40,9 +40,8 @@ impl Board {
     }
 
     pub fn calculate_next_move(&self) -> (u8, u8) {
-        let root = self.generate_tree();
+        let root = self.generate_tree(self);
         let mut best_move = &Move {
-            // I don't really know what values to put there, could you help me ?
             x: u8::MAX,
             y: u8::MAX,
             next_moves: vec![],
@@ -69,7 +68,42 @@ impl Board {
         (best_move.x, best_move.y)
     }
 
-    fn generate_tree(&self) -> Move {
+    fn is_stone_nearby(
+        &self,
+        board: &Board,
+        x: usize,
+        y: usize,
+    ) -> bool {
+        #[rustfmt::skip]
+        const DIRECTIONS: [(isize, isize); 8] = [
+            (-1, -1), (-1, 0), (-1, 1),
+            (0, -1),          (0, 1),
+            (1, -1), (1, 0), (1, 1),
+        ];
+
+        // Iterate over each surrounding cell
+        for (dy, dx) in DIRECTIONS.iter() {
+            let nx = x as isize + dx;
+            let ny = y as isize + dy;
+
+            // Check if the position is within bounds
+            if nx >= 0
+                && nx < board.size as isize
+                && ny >= 0
+                && ny < board.size as isize
+            {
+                let nx = nx as usize;
+                let ny = ny as usize;
+
+                if board.board[ny][nx] != CellContent::Empty {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    fn generate_tree(&self, board: &Board) -> Move {
         let mut root = Move {
             // I don't really know what values to put there, could you help me ?
             x: u8::MAX,
@@ -79,8 +113,9 @@ impl Board {
 
         for y in 0..self.size {
             for x in 0..self.size {
-                if self.board[y as usize][x as usize]
-                    == CellContent::Empty
+                if self.is_stone_nearby(board, x as usize, y as usize)
+                    && board.board[y as usize][x as usize]
+                        == CellContent::Empty
                 {
                     let child_move = Move {
                         x,
