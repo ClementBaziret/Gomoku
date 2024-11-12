@@ -1,9 +1,10 @@
 mod ai;
 mod board;
+mod evaluation;
+mod grid_iterators;
 mod model;
 mod parser;
 mod traits;
-mod grid_iterators;
 
 use parser::Parser;
 

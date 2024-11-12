@@ -1,9 +1,9 @@
+use crate::model::CellContent;
 use std::io::Write;
 use std::process;
 use std::{fs::File, io};
 
 use crate::ai::Ai;
-use crate::model::CellContent;
 use crate::traits::GomokuAI;
 
 pub struct Parser {
@@ -66,6 +66,9 @@ impl Parser {
     fn send_play(&mut self) {
         let play = self.ai.play();
         println!("{},{}", play.0, play.1);
+        self.write_to_output_file(
+            format!("{},{}\n", play.0, play.1).as_str(),
+        )
     }
 
     fn handle_about(&mut self, _cmd: &str) -> bool {
@@ -102,7 +105,12 @@ impl Parser {
     }
 
     fn handle_begin(&mut self, _cmd: &str) -> bool {
-        self.send_play();
+        // self.send_play();
+        let play = (10, 10);
+        println!("{},{}", play.0, play.1);
+        self.write_to_output_file(
+            format!("{},{}\n", play.0, play.1).as_str(),
+        );
 
         false
     }

@@ -1,4 +1,4 @@
-struct GridColumnIterator<
+pub struct GridColumnIterator<
     'a,
     T,
     const WIDTH: usize,
@@ -47,7 +47,8 @@ impl<'a, T, const W: usize, const H: usize> GridColumns<'a, T, W, H> {
     }
 }
 
-struct GridColumns<'a, T, const WIDTH: usize, const HEIGHT: usize> {
+pub struct GridColumns<'a, T, const WIDTH: usize, const HEIGHT: usize>
+{
     inner_grid: &'a [[T; WIDTH]; HEIGHT],
     current_column: usize,
 }
@@ -73,7 +74,7 @@ impl<'a, T, const WIDTH: usize, const H: usize> Iterator
     }
 }
 
-struct UpRightDiagonalGridIterator<
+pub struct UpRightDiagonalGridIterator<
     'a,
     T,
     const WIDTH: usize,
@@ -126,7 +127,7 @@ impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
     }
 }
 
-struct GridUpRightDiagonals<
+pub struct GridUpRightDiagonals<
     'a,
     T,
     const WIDTH: usize,
@@ -168,7 +169,7 @@ impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
     }
 }
 
-struct DownRightDiagonalGridIterator<
+pub struct DownRightDiagonalGridIterator<
     'a,
     T,
     const WIDTH: usize,
@@ -221,7 +222,7 @@ impl<'a, T, const WIDTH: usize, const HEIGHT: usize> Iterator
     }
 }
 
-struct GridDownRightDiagonals<
+pub struct GridDownRightDiagonals<
     'a,
     T,
     const WIDTH: usize,
