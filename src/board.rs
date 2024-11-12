@@ -98,6 +98,30 @@ impl Board {
         return false;
     }
 
+    fn is_valid_adjacent_cell(&self, x: u8, y: u8) -> bool {
+        let (x_us, y_us) = (x as usize, y as usize);
+
+        if self.board[y_us][x_us] != CellContent::Empty {
+            false
+        } else {
+            self.is_stone_nearby(x_us, y_us)
+        }
+    }
+
+    pub fn get_adjacent_cells(&self) -> Vec<(u8, u8)> {
+        let mut ret = Vec::new();
+
+        for (y, row) in self.board.iter().enumerate() {
+            for (x, _) in row.iter().enumerate() {
+                if self.is_valid_adjacent_cell(x as u8, y as u8) {
+                    ret.push((x as u8, y as u8));
+                }
+            }
+        }
+
+        ret
+    }
+
     fn generate_tree(&self) -> Move {
         let mut root = Move {
             // I don't really know what values to put there, could you help me ?
@@ -106,21 +130,14 @@ impl Board {
             next_moves: Vec::new(),
         };
 
-        for y in 0..self.size {
-            for x in 0..self.size {
-                if self.is_stone_nearby(x as usize, y as usize)
-                    && self.board[y as usize][x as usize]
-                        == CellContent::Empty
-                {
-                    let child_move = Move {
-                        x,
-                        y,
-                        next_moves: Vec::new(),
-                    };
-                    root.next_moves.push(child_move);
-                }
-            }
+        for (x, y) in self.get_adjacent_cells() {
+            root.next_moves.push(Move {
+                x,
+                y,
+                next_moves: Vec::new(),
+            });
         }
+
         root
     }
 
