@@ -7,7 +7,7 @@ pub struct Move {
     pub next_moves: Vec<Move>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Copy, Debug, Clone)]
 pub struct Board {
     pub board: [[CellContent; 20]; 20],
     pub size: u8,
@@ -49,10 +49,17 @@ impl Board {
         };
         let mut best_move_value: i32 = i32::MIN;
 
+        let mut board_copy = *self;
         for child in &root.next_moves {
             let mut move_value: i32 = -5;
-            if (self.too_far(child)) == false {
-                move_value = self.evaluate_board();
+            // The condition `self.too_far` seems to be broken so
+            // it is turned off by the `|| true for the AI to find its move`
+            if (self.too_far(child)) == false || true {
+                board_copy.board[child.y as usize]
+                    [child.x as usize] = CellContent::Ally;
+                move_value = board_copy.evaluate_board();
+                board_copy.board[child.y as usize]
+                    [child.x as usize] = CellContent::Empty;
             }
             if move_value > best_move_value {
                 best_move_value = move_value;
