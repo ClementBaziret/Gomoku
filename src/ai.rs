@@ -52,11 +52,11 @@ impl GomokuAI<u8> for Ai {
             }
             match stone {
                 Stone::Ally => {
-                    self.board.board[x as usize][y as usize] =
+                    self.board.board[y as usize][x as usize] =
                         CellContent::Ally
                 }
                 Stone::Opponent => {
-                    self.board.board[x as usize][y as usize] =
+                    self.board.board[y as usize][x as usize] =
                         CellContent::Opponent
                 }
             }
