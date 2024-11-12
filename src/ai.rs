@@ -82,7 +82,7 @@ mod tests {
 
         let ai_move = ai.play();
 
-        assert!(ai_move == (5, 2) || ai_move == (5, 8));
+        assert_eq!(ai_move, (5, 8));
     }
 
     #[test]
@@ -131,5 +131,70 @@ mod tests {
         let ai_move = ai.play();
 
         assert!(ai_move == (0, 0) || ai_move == (5, 5));
+    }
+
+    #[test]
+    fn horizontal_lose() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (5, 4, Stone::Opponent),
+            (5, 5, Stone::Opponent),
+            (5, 6, Stone::Opponent),
+            (5, 7, Stone::Opponent),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (5, 2) || ai_move == (5, 8));
+    }
+
+    #[test]
+    fn vertical_lose() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (1, 1, Stone::Opponent),
+            (2, 1, Stone::Opponent),
+            (3, 1, Stone::Opponent),
+            (4, 1, Stone::Opponent),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (0, 1) || ai_move == (5, 1));
+    }
+
+    #[test]
+    fn up_right_diagonal_lose() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (5, 1, Stone::Opponent),
+            (4, 2, Stone::Opponent),
+            (3, 3, Stone::Opponent),
+            (2, 4, Stone::Opponent),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert!(ai_move == (6, 0) || ai_move == (1, 5));
+    }
+
+    #[test]
+    fn down_right_diagonal_lose() {
+        let mut ai = Ai::new();
+
+        ai.set_board(&[
+            (0, 0, Stone::Ally),
+            (1, 1, Stone::Opponent),
+            (2, 2, Stone::Opponent),
+            (3, 3, Stone::Opponent),
+            (4, 4, Stone::Opponent),
+        ]);
+
+        let ai_move = ai.play();
+
+        assert_eq!(ai_move, (5, 5));
     }
 }
