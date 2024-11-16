@@ -35,6 +35,8 @@ where
     fn get_coords(&self) -> (IndexType, IndexType);
 
     fn undo_move_on_board(&self, board: &mut Board);
+
+    fn get_subtree(&mut self) -> &mut Vec<impl Move<IndexType>>;
 }
 
 trait AMove {
@@ -43,6 +45,8 @@ trait AMove {
     fn _get_coords(&self) -> (u8, u8);
 
     fn content() -> CellContent;
+
+    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>>;
 }
 
 impl<T: AMove> Move<u8> for T {
@@ -63,6 +67,10 @@ impl<T: AMove> Move<u8> for T {
 
         board.board[y as usize][x as usize] = CellContent::Empty;
     }
+
+    fn get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
+        self._get_subtree()
+    }
 }
 
 impl AMove for AllyMove {
@@ -81,6 +89,10 @@ impl AMove for AllyMove {
     fn _get_coords(&self) -> (u8, u8) {
         (self.x, self.y)
     }
+
+    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
+        &mut self.opp_moves
+    }
 }
 
 impl AMove for OpponentMove {
@@ -98,6 +110,10 @@ impl AMove for OpponentMove {
 
     fn _get_coords(&self) -> (u8, u8) {
         (self.x, self.y)
+    }
+
+    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
+        &mut self.ally_moves.moves
     }
 }
 
