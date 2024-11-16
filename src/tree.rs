@@ -1,9 +1,12 @@
-use crate::{board::Board, model::CellContent};
+use std::cmp::{max, min};
+
+use crate::{board::Board, evaluation::evaluate, model::CellContent};
 
 #[derive(Debug)]
 pub struct AllyMove {
     pub x: u8,
     pub y: u8,
+    pub value: Option<i32>,
     pub opp_moves: Vec<OpponentMove>,
 }
 
@@ -11,6 +14,7 @@ pub struct AllyMove {
 pub struct OpponentMove {
     pub x: u8,
     pub y: u8,
+    pub value: Option<i32>,
     pub ally_moves: Tree,
 }
 
@@ -37,6 +41,10 @@ where
     fn undo_move_on_board(&self, board: &mut Board);
 
     fn get_subtree(&mut self) -> &mut Vec<impl Move<IndexType>>;
+
+    fn get_value(&mut self) -> &mut Option<i32>;
+
+    fn choose_move(num1: i32, num2: i32) -> i32;
 }
 
 trait AMove {
@@ -47,12 +55,17 @@ trait AMove {
     fn content() -> CellContent;
 
     fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>>;
+
+    fn _get_value(&mut self) -> &mut Option<i32>;
+
+    fn _choose_move(num1: i32, num2: i32) -> i32;
 }
 
 impl<T: AMove> Move<u8> for T {
     fn new(x: u8, y: u8) -> Self {
         Self::_new(x, y)
     }
+
     fn get_coords(&self) -> (u8, u8) {
         self._get_coords()
     }
@@ -71,6 +84,14 @@ impl<T: AMove> Move<u8> for T {
     fn get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
         self._get_subtree()
     }
+
+    fn get_value(&mut self) -> &mut Option<i32> {
+        self._get_value()
+    }
+
+    fn choose_move(num1: i32, num2: i32) -> i32 {
+        Self::_choose_move(num1, num2)
+    }
 }
 
 impl AMove for AllyMove {
@@ -78,6 +99,7 @@ impl AMove for AllyMove {
         Self {
             x,
             y,
+            value: None,
             opp_moves: vec![],
         }
     }
@@ -93,6 +115,14 @@ impl AMove for AllyMove {
     fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
         &mut self.opp_moves
     }
+
+    fn _get_value(&mut self) -> &mut Option<i32> {
+        &mut self.value
+    }
+
+    fn _choose_move(num1: i32, num2: i32) -> i32 {
+        max(num1, num2)
+    }
 }
 
 impl AMove for OpponentMove {
@@ -100,6 +130,7 @@ impl AMove for OpponentMove {
         Self {
             x,
             y,
+            value: None,
             ally_moves: Tree::default(),
         }
     }
@@ -114,6 +145,14 @@ impl AMove for OpponentMove {
 
     fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
         &mut self.ally_moves.moves
+    }
+
+    fn _get_value(&mut self) -> &mut Option<i32> {
+        &mut self.value
+    }
+
+    fn _choose_move(num1: i32, num2: i32) -> i32 {
+        min(num1, num2)
     }
 }
 
@@ -179,6 +218,50 @@ impl Tree {
 
         tree
     }
+}
+
+/// Depth-first tree traversal which assigns a value
+/// to each node of the tree, based on static evaluation
+/// of leaf nodes and min/max alternating going down the stack
+pub fn evaluate_move_recursive<MoveType, IndexType>(
+    to_eval: &mut MoveType,
+    board: &mut Board,
+) -> i32
+where
+    MoveType: Move<IndexType>,
+    IndexType: Into<usize>,
+{
+    to_eval.play_move_on_board(board);
+
+    let ret = {
+        let subtree = to_eval.get_subtree();
+
+        if subtree.is_empty() {
+            let score = evaluate(board);
+            *to_eval.get_value() = Some(score);
+
+            score
+        } else {
+            let mut subtree_iter = subtree.iter_mut();
+            let mut ret_score = evaluate_move_recursive(
+                subtree_iter.next().unwrap(),
+                board,
+            );
+
+            for sub_move in subtree_iter {
+                ret_score = MoveType::choose_move(
+                    ret_score,
+                    evaluate_move_recursive(sub_move, board),
+                );
+            }
+
+            ret_score
+        }
+    };
+
+    to_eval.undo_move_on_board(board);
+
+    ret
 }
 
 impl TreeRoot {
