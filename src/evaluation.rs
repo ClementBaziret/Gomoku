@@ -7,15 +7,15 @@ use crate::{
 };
 
 fn iterate_row(temp: Vec<&CellContent>) -> i32 {
-    let mut result = 0;
-    let mut temp_result = 0;
+    let mut result = -10000000;
+    let mut temp_result = result;
     for window in temp.windows(5) {
         // Check for 5
         if window == &[&CellContent::Ally; 5] {
-            temp_result = 1000000;
+            return 1000000;
         }
         if window == &[&CellContent::Opponent; 5] {
-            temp_result = -1000000;
+            return -1000000;
         }
 
         // Check for different 4
@@ -235,6 +235,9 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
             result = temp_result;
         }
     }
+    if result == -10000000 {
+        result = 0;
+    }
     result
 }
 
@@ -330,4 +333,64 @@ fn check_up_right_winning_board() {
     let move_value = evaluate(&mut board);
 
     assert_eq!(move_value, 1000000);
+}
+
+#[test]
+fn check_horizontal_losing_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Opponent;
+    board.board[1][2] = CellContent::Opponent;
+    board.board[1][3] = CellContent::Opponent;
+    board.board[1][4] = CellContent::Opponent;
+    board.board[1][5] = CellContent::Opponent;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, -1000000);
+}
+
+#[test]
+fn check_vertical_losing_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Opponent;
+    board.board[2][1] = CellContent::Opponent;
+    board.board[3][1] = CellContent::Opponent;
+    board.board[4][1] = CellContent::Opponent;
+    board.board[5][1] = CellContent::Opponent;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, -1000000);
+}
+
+#[test]
+fn check_down_right_losing_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Opponent;
+    board.board[2][2] = CellContent::Opponent;
+    board.board[3][3] = CellContent::Opponent;
+    board.board[4][4] = CellContent::Opponent;
+    board.board[5][5] = CellContent::Opponent;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, -1000000);
+}
+
+#[test]
+fn check_up_right_losing_board() {
+    let mut board = Board::new();
+
+    board.board[4][1] = CellContent::Opponent;
+    board.board[3][2] = CellContent::Opponent;
+    board.board[2][3] = CellContent::Opponent;
+    board.board[1][4] = CellContent::Opponent;
+    board.board[0][5] = CellContent::Opponent;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, -1000000);
 }
