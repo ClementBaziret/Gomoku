@@ -16,13 +16,20 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
         }
         if window
             == &[
-                // &CellContent::Empty,
+                &CellContent::Empty,
                 &CellContent::Ally,
                 &CellContent::Ally,
                 &CellContent::Ally,
                 &CellContent::Ally,
-                // &CellContent::Empty,
             ]
+            || window
+                == &[
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                ]
         {
             return 40;
         }
@@ -33,8 +40,15 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                 &CellContent::Opponent,
                 &CellContent::Opponent,
                 &CellContent::Opponent,
-                &CellContent::Empty,
             ]
+            || window
+                == &[
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                ]
         {
             return -40;
         }
@@ -47,7 +61,6 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            println!("found it");
             return 20;
         }
         if window
@@ -59,7 +72,6 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            println!("found bad");
             return -20;
         }
     }
@@ -69,35 +81,29 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
 fn check_for_5_in_board(board: &Board) -> i32 {
     let mut score = 0;
 
-    // board.print_board();
-    println!("1: {}", &score);
     // Check horizontally
     for row in board.board.iter() {
         let temp: Vec<_> = row.iter().collect();
         score += iterate_row(temp);
     }
 
-    println!("2: {}", &score);
     // Check vertically
     for col in GridColumns::new(&board.board) {
         let temp: Vec<_> = col.collect();
         score += iterate_row(temp);
     }
 
-    println!("3: {}", &score);
     // Check diagonally (up right)
     for diag in GridUpRightDiagonals::new(&board.board) {
         let temp: Vec<_> = diag.collect();
         score += iterate_row(temp);
     }
 
-    println!("4: {}", &score);
     // Check diagonally (up left)
     for diag in GridDownRightDiagonals::new(&board.board) {
         let temp: Vec<_> = diag.collect();
         score += iterate_row(temp);
     }
-    println!("5: {}", &score);
     // board.print_board();
     score
 }
