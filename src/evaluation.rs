@@ -10,12 +10,15 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
     let mut result = 0;
     let mut temp_result = 0;
     for window in temp.windows(5) {
+        // Check for 5
         if window == &[&CellContent::Ally; 5] {
             temp_result = 1000000;
         }
         if window == &[&CellContent::Opponent; 5] {
             temp_result = -1000000;
         }
+
+        // Check for different 4
         if window
             == &[
                 &CellContent::Empty,
@@ -33,7 +36,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            temp_result = 40;
+            temp_result = 5000;
         }
         if window
             == &[
@@ -52,8 +55,48 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            temp_result = -40;
+            temp_result = -5000;
         }
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
+            ]
+            || window
+                == &[
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Opponent,
+                ]
+        {
+            temp_result = 2000;
+        }
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+            ]
+            || window
+                == &[
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Ally,
+                ]
+        {
+            temp_result = -2000;
+        }
+
+        // Check for different 3
         if window
             == &[
                 &CellContent::Ally,
@@ -79,7 +122,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Ally,
                 ]
         {
-            temp_result = 20;
+            temp_result = 1000;
         }
         if window
             == &[
@@ -106,8 +149,86 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Opponent,
                 ]
         {
-            temp_result = -20;
+            temp_result = -1000;
         }
+
+        // Misc
+        if window
+        == &[
+            &CellContent::Ally,
+            &CellContent::Empty,
+            &CellContent::Ally,
+            &CellContent::Ally,
+            &CellContent::Empty,
+        ]
+        || window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+            ]
+    {
+        temp_result = 800;
+    }
+    if window
+        == &[
+            &CellContent::Opponent,
+            &CellContent::Empty,
+            &CellContent::Opponent,
+            &CellContent::Opponent,
+            &CellContent::Empty,
+        ]
+        || window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+            ]
+    {
+        temp_result = -800;
+    }
+
+    // 2 in a row
+    if window
+    == &[
+        &CellContent::Empty,
+        &CellContent::Ally,
+        &CellContent::Ally,
+        &CellContent::Empty,
+        &CellContent::Empty,
+    ] || window
+    == &[
+        &CellContent::Empty,
+        &CellContent::Empty,
+        &CellContent::Ally,
+        &CellContent::Ally,
+        &CellContent::Empty,
+    ]
+    {
+        temp_result = 100
+    }
+    if window
+    == &[
+        &CellContent::Empty,
+        &CellContent::Opponent,
+        &CellContent::Opponent,
+        &CellContent::Empty,
+        &CellContent::Empty,
+    ] || window
+    == &[
+        &CellContent::Empty,
+        &CellContent::Empty,
+        &CellContent::Opponent,
+        &CellContent::Opponent,
+        &CellContent::Empty,
+    ]
+    {
+        temp_result = -100
+    }
         if temp_result > result {
             result = temp_result;
         }
