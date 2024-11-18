@@ -33,7 +33,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            temp_result = 40;
+            temp_result = 5000;
         }
         if window
             == &[
@@ -52,7 +52,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            temp_result = -40;
+            temp_result = -5000;
         }
         if window
             == &[
@@ -79,7 +79,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Ally,
                 ]
         {
-            temp_result = 20;
+            temp_result = 1000;
         }
         if window
             == &[
@@ -106,7 +106,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Opponent,
                 ]
         {
-            temp_result = -20;
+            temp_result = -1000;
         }
         if temp_result > result {
             result = temp_result;
