@@ -108,14 +108,14 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
         {
             temp_result = -20;
         }
-        if (temp_result > result) {
+        if temp_result > result {
             result = temp_result;
         }
     }
     result
 }
 
-fn check_for_5_in_board(board: &Board) -> i32 {
+fn check_rows_in_board(board: &Board) -> i32 {
     let mut score = 0;
 
     // Check horizontally
@@ -145,6 +145,6 @@ fn check_for_5_in_board(board: &Board) -> i32 {
 }
 
 pub fn evaluate(board: &Board) -> i32 {
-    let i = check_for_5_in_board(board);
+    let i = check_rows_in_board(board);
     i
 }
