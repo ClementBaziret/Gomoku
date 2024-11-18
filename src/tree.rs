@@ -376,6 +376,7 @@ fn test_detect_immediate_lose() {
     root.board.board[11][10] = CellContent::Opponent;
     root.board.board[12][10] = CellContent::Opponent;
     root.board.board[13][10] = CellContent::Opponent;
+    root.board.board[14][10] = CellContent::Ally;
 
     root.tree = Tree::gen_tree(&mut root.board, 1);
 
@@ -393,8 +394,5 @@ fn test_detect_immediate_lose() {
     assert!(chosen_move.is_some());
     let chosen_move = chosen_move.unwrap();
 
-    assert!(
-        chosen_move.x == 10
-            && (chosen_move.y == 9 || chosen_move.y == 14)
-    );
+    assert_eq!((chosen_move.x, chosen_move.y), (10, 9));
 }
