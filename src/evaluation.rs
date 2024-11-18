@@ -7,7 +7,7 @@ use crate::{
 };
 
 fn iterate_row(temp: Vec<&CellContent>) -> i32 {
-    let mut result = -10000000;
+    let mut result = -1000000;
     let mut temp_result = result;
     for window in temp.windows(5) {
         // Check for 5
@@ -235,15 +235,14 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
             result = temp_result;
         }
     }
-    if result == -10000000 {
-        result = 0;
+    if result == -1000000 {
+        return 0;
     }
     result
 }
 
 fn check_rows_in_board(board: &Board) -> i32 {
     let mut score = 0;
-
     // Check horizontally
     for row in board.board.iter() {
         let temp: Vec<_> = row.iter().collect();
