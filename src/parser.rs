@@ -72,8 +72,14 @@ impl Parser {
     }
 
     fn handle_about(&mut self, _cmd: &str) -> bool {
-        for info in self.ai.about() {
-            print!("{}=\"{}\", ", info.0, info.1);
+        let temp_about = self.ai.about();
+        if temp_about.is_empty() {
+            println!("name=\"name\", version=\"1.0\", author=\"auth\", country=\"FRA\"");
+            return false;
+        }
+        print!("{}=\"{}\"", temp_about[0].0, temp_about[0].1);
+        for info in &temp_about[1..] {
+            print!(", {}=\"{}\"", info.0, info.1);
         }
         print!("\n");
         false
@@ -105,7 +111,7 @@ impl Parser {
     }
 
     fn handle_begin(&mut self, _cmd: &str) -> bool {
-        // self.send_play();
+        self.ai.board.board[10][10] = CellContent::Ally;
         let play = (10, 10);
         println!("{},{}", play.0, play.1);
         self.write_to_output_file(
