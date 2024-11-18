@@ -271,3 +271,63 @@ pub fn evaluate(board: &Board) -> i32 {
     let i = check_rows_in_board(board);
     i
 }
+
+#[test]
+fn check_horizontal_winning_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+    board.board[1][2] = CellContent::Ally;
+    board.board[1][3] = CellContent::Ally;
+    board.board[1][4] = CellContent::Ally;
+    board.board[1][5] = CellContent::Ally;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, 1000000);
+}
+
+#[test]
+fn check_vertical_winning_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+    board.board[2][1] = CellContent::Ally;
+    board.board[3][1] = CellContent::Ally;
+    board.board[4][1] = CellContent::Ally;
+    board.board[5][1] = CellContent::Ally;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, 1000000);
+}
+
+#[test]
+fn check_down_right_winning_board() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+    board.board[2][2] = CellContent::Ally;
+    board.board[3][3] = CellContent::Ally;
+    board.board[4][4] = CellContent::Ally;
+    board.board[5][5] = CellContent::Ally;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, 1000000);
+}
+
+#[test]
+fn check_up_right_winning_board() {
+    let mut board = Board::new();
+
+    board.board[4][1] = CellContent::Ally;
+    board.board[3][2] = CellContent::Ally;
+    board.board[2][3] = CellContent::Ally;
+    board.board[1][4] = CellContent::Ally;
+    board.board[0][5] = CellContent::Ally;
+
+    let move_value = evaluate(&mut board);
+
+    assert_eq!(move_value, 1000000);
+}
