@@ -124,7 +124,7 @@ impl AMove for AllyMove {
     }
 
     fn _choose_move(num1: i32, num2: i32) -> i32 {
-        max(num1, num2)
+        min(num1, num2)
     }
 }
 
@@ -155,7 +155,7 @@ impl AMove for OpponentMove {
     }
 
     fn _choose_move(num1: i32, num2: i32) -> i32 {
-        min(num1, num2)
+        max(num1, num2)
     }
 }
 
