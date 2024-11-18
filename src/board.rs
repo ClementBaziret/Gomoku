@@ -24,11 +24,6 @@ impl Board {
     pub fn print_board(&self) {
         for y in self.board.iter() {
             for x in y.iter() {
-                // let symbol = match x {
-                //     CellContent::Empty => '.',
-                //     CellContent::Opponent => 'X',
-                //     CellContent::Ally => 'O',
-                // };
                 print!("{} ", x.to_char());
             }
             println!();
@@ -59,14 +54,12 @@ impl Board {
                 move_value = board_copy.evaluate_board();
                 board_copy.board[child.y as usize]
                 [child.x as usize] = CellContent::Empty;
-                println!("{} {}: {}", child.x, child.y, move_value);
             }
             if move_value > best_move_value {
                 best_move_value = move_value;
                 best_move = child;
             }
         }
-        // println!("{} {} : {}", best_move.x, best_move.y, best_move_value);
         (best_move.x, best_move.y)
     }
 
@@ -133,7 +126,6 @@ impl Board {
 
     fn evaluate_board(&self) -> i32 {
         let ret = evaluate(self);
-        println!("{}", ret);
         ret
     }
 
