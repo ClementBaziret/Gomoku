@@ -7,12 +7,14 @@ use crate::{
 };
 
 fn iterate_row(temp: Vec<&CellContent>) -> i32 {
+    let mut result = 0;
+    let mut temp_result = 0;
     for window in temp.windows(5) {
         if window == &[&CellContent::Ally; 5] {
-            return 1000000;
+            temp_result = 1000000;
         }
         if window == &[&CellContent::Opponent; 5] {
-            return -1000000;
+            temp_result = -1000000;
         }
         if window
             == &[
@@ -31,7 +33,7 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            return 40;
+            temp_result = 40;
         }
         if window
             == &[
@@ -50,32 +52,67 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
                     &CellContent::Empty,
                 ]
         {
-            return -40;
+            temp_result = -40;
         }
         if window
             == &[
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
                 &CellContent::Empty,
-                &CellContent::Ally,
-                &CellContent::Ally,
-                &CellContent::Ally,
                 &CellContent::Empty,
             ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                ]
         {
-            return 20;
+            temp_result = 20;
         }
         if window
             == &[
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
                 &CellContent::Empty,
-                &CellContent::Opponent,
-                &CellContent::Opponent,
-                &CellContent::Opponent,
                 &CellContent::Empty,
             ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                ]
         {
-            return -20;
+            temp_result = -20;
+        }
+        if (temp_result > result) {
+            result = temp_result;
         }
     }
-    0
+    result
 }
 
 fn check_for_5_in_board(board: &Board) -> i32 {
@@ -104,7 +141,6 @@ fn check_for_5_in_board(board: &Board) -> i32 {
         let temp: Vec<_> = diag.collect();
         score += iterate_row(temp);
     }
-    // board.print_board();
     score
 }
 
