@@ -20,12 +20,12 @@ pub struct OpponentMove {
 
 #[derive(Debug, Default)]
 pub struct Tree {
-    moves: Vec<AllyMove>,
+    pub moves: Vec<AllyMove>,
 }
 
 pub struct TreeRoot {
-    board: Board,
-    tree: Tree,
+    pub board: Board,
+    pub tree: Tree,
 }
 
 pub trait Move<IndexType>
