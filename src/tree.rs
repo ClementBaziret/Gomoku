@@ -1,4 +1,7 @@
-use std::cmp::{max, min};
+use std::{
+    cmp::{max, min},
+    i32,
+};
 
 use crate::{board::Board, evaluation::evaluate, model::CellContent};
 
@@ -328,4 +331,37 @@ fn check_lose_move_evaluation() {
         evaluate_move_recursive(&mut opponent_play, &mut board);
 
     assert_eq!(move_value, -1000000);
+}
+
+fn test_detect_immediate_win() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[10][10] = CellContent::Ally;
+    root.board.board[11][10] = CellContent::Ally;
+    root.board.board[12][10] = CellContent::Ally;
+    root.board.board[13][10] = CellContent::Ally;
+
+    root.tree = Tree::gen_tree(&mut root.board, 1);
+    // root.tree
+
+    let mut chosen_move: Option<&AllyMove> = None;
+    let mut best_value = i32::MIN;
+
+    for tree_move in &mut root.tree.moves {
+        let val = evaluate_move_recursive(tree_move, &mut root.board);
+        if val > best_value {
+            best_value = val;
+            chosen_move = Some(tree_move);
+        }
+    }
+
+    assert!(chosen_move.is_some());
+    let chosen_move = chosen_move.unwrap();
+
+    assert!(
+        chosen_move.x == 10
+            && (chosen_move.y == 9 || chosen_move.y == 14)
+    );
 }
