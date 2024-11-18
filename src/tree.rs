@@ -2,7 +2,7 @@ use std::cmp::{max, min};
 
 use crate::{board::Board, evaluation::evaluate, model::CellContent};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AllyMove {
     pub x: u8,
     pub y: u8,
@@ -10,7 +10,7 @@ pub struct AllyMove {
     pub opp_moves: Vec<OpponentMove>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct OpponentMove {
     pub x: u8,
     pub y: u8,
@@ -18,7 +18,7 @@ pub struct OpponentMove {
     pub ally_moves: Tree,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialEq)]
 pub struct Tree {
     pub moves: Vec<AllyMove>,
 }
@@ -271,4 +271,61 @@ impl TreeRoot {
             tree: Tree::default(),
         }
     }
+}
+
+#[test]
+fn check_tree_generation() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+
+    let mut root: TreeRoot = TreeRoot {
+        board,
+        tree: Tree::gen_tree(&mut board, 1),
+    };
+    let expected: Vec<AllyMove> = vec![
+        AllyMove::new(0, 0),
+        AllyMove::new(1, 0),
+        AllyMove::new(2, 0),
+        AllyMove::new(0, 1),
+        AllyMove::new(2, 1),
+        AllyMove::new(0, 2),
+        AllyMove::new(1, 2),
+        AllyMove::new(2, 2),
+    ];
+    for (i, m) in root.tree.moves.iter().enumerate() {
+        assert!(m.x == expected[i].x && m.y == expected[i].y);
+    }
+}
+
+#[test]
+fn check_win_move_evaluation() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+    board.board[1][2] = CellContent::Ally;
+    board.board[1][3] = CellContent::Ally;
+    board.board[1][4] = CellContent::Ally;
+
+    let mut ally_play = AllyMove::new(5, 1);
+    let move_value =
+        evaluate_move_recursive(&mut ally_play, &mut board);
+
+    assert_eq!(move_value, 1000000);
+}
+
+#[test]
+fn check_lose_move_evaluation() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Opponent;
+    board.board[1][2] = CellContent::Opponent;
+    board.board[1][3] = CellContent::Opponent;
+    board.board[1][4] = CellContent::Opponent;
+
+    let mut opponent_play = OpponentMove::new(5, 1);
+    let move_value =
+        evaluate_move_recursive(&mut opponent_play, &mut board);
+
+    assert_eq!(move_value, -1000000);
 }
