@@ -22,12 +22,12 @@ impl Board {
     pub fn print_board(&self) {
         for y in self.board.iter() {
             for x in y.iter() {
-                let symbol = match x {
-                    CellContent::Empty => '.',
-                    CellContent::Opponent => 'X',
-                    CellContent::Ally => 'O',
-                };
-                print!("{} ", symbol);
+                // let symbol = match x {
+                //     CellContent::Empty => '.',
+                //     CellContent::Opponent => 'X',
+                //     CellContent::Ally => 'O',
+                // };
+                print!("{} ", x.to_char());
             }
             println!();
         }
@@ -61,6 +61,7 @@ impl Board {
                 best_move = child;
             }
         }
+        // println!("{} {} : {}", best_move.x, best_move.y, best_move_value);
         (best_move.x, best_move.y)
     }
 
