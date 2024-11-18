@@ -33,6 +33,23 @@ pub enum CellContent {
     Opponent = Stone::Opponent as isize,
 }
 
+impl CellContent {
+    pub fn to_string(&self) -> &str {
+        match self {
+            CellContent::Empty => "Empty",
+            CellContent::Opponent => "Opponent",
+            CellContent::Ally => "Ally",
+        }
+    }
+    pub fn to_char(&self) -> char {
+        match self {
+            CellContent::Empty => '.',
+            CellContent::Opponent => 'X',
+            CellContent::Ally => 'O',
+        }
+    }
+}
+
 /// Describes all the possible game types defined
 /// by the `INFO game_type` command
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
