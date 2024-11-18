@@ -1,10 +1,21 @@
 use crate::evaluation::evaluate;
 use crate::model::CellContent;
 
+#[derive(PartialEq, Debug)]
 pub struct Move {
     pub x: u8,
     pub y: u8,
     pub next_moves: Vec<Move>,
+}
+
+impl Move {
+    pub fn new(x: u8, y: u8) -> Self {
+        Move {
+            x,
+            y,
+            next_moves: Vec::new(),
+        }
+    }
 }
 
 #[derive(Copy, Debug, Clone)]
@@ -162,4 +173,49 @@ impl Board {
         self.board[y as usize][x as usize] = CellContent::Ally;
         (x, y)
     }
+}
+
+#[test]
+fn check_stone_nearby() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+
+    let tree = board.generate_tree(&board);
+    let expected: Vec<Move> = vec![
+        Move::new(0, 0),
+        Move::new(1, 0),
+        Move::new(2, 0),
+        Move::new(0, 1),
+        Move::new(2, 1),
+        Move::new(0, 2),
+        Move::new(1, 2),
+        Move::new(2, 2),
+    ];
+
+    assert_eq!(tree.next_moves, expected);
+}
+
+#[test]
+fn check_stone_nearby_2_moves() {
+    let mut board = Board::new();
+
+    board.board[1][1] = CellContent::Ally;
+    board.board[2][1] = CellContent::Opponent;
+
+    let tree = board.generate_tree(&board);
+    let expected: Vec<Move> = vec![
+        Move::new(0, 0),
+        Move::new(1, 0),
+        Move::new(2, 0),
+        Move::new(0, 1),
+        Move::new(2, 1),
+        Move::new(0, 2),
+        Move::new(2, 2),
+        Move::new(0, 3),
+        Move::new(1, 3),
+        Move::new(2, 3),
+    ];
+
+    assert_eq!(tree.next_moves, expected);
 }
