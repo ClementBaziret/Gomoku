@@ -474,7 +474,37 @@ fn test_detect_down_right_diagonal_down_immediate_win() {
 }
 
 #[test]
-fn test_detect_immediate_lose() {
+fn test_detect_horizontal_up_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[10][10] = CellContent::Opponent;
+    root.board.board[10][11] = CellContent::Opponent;
+    root.board.board[10][12] = CellContent::Opponent;
+    root.board.board[10][13] = CellContent::Opponent;
+    root.board.board[10][14] = CellContent::Ally;
+
+    assert_expected_move(&mut root, 9, 10);
+}
+
+#[test]
+fn test_detect_horizontal_down_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[10][9] = CellContent::Ally;
+    root.board.board[10][10] = CellContent::Opponent;
+    root.board.board[10][11] = CellContent::Opponent;
+    root.board.board[10][12] = CellContent::Opponent;
+    root.board.board[10][13] = CellContent::Opponent;
+
+    assert_expected_move(&mut root, 14, 10);
+}
+
+#[test]
+fn test_detect_vertical_up_immediate_lose() {
     let mut root = TreeRoot::new(Board::new());
 
     assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
@@ -486,4 +516,79 @@ fn test_detect_immediate_lose() {
     root.board.board[14][10] = CellContent::Ally;
 
     assert_expected_move(&mut root, 10, 9);
+}
+
+#[test]
+fn test_detect_vertical_down_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[9][10] = CellContent::Ally;
+    root.board.board[10][10] = CellContent::Opponent;
+    root.board.board[11][10] = CellContent::Opponent;
+    root.board.board[12][10] = CellContent::Opponent;
+    root.board.board[13][10] = CellContent::Opponent;
+
+    assert_expected_move(&mut root, 10, 14);
+}
+
+#[test]
+fn test_detect_up_right_diagonal_up_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[8][1] = CellContent::Opponent;
+    root.board.board[7][2] = CellContent::Opponent;
+    root.board.board[6][3] = CellContent::Opponent;
+    root.board.board[5][4] = CellContent::Opponent;
+    root.board.board[4][5] = CellContent::Ally;
+
+    assert_expected_move(&mut root, 0, 9);
+}
+
+#[test]
+fn test_detect_up_right_diagonal_down_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[9][0] = CellContent::Ally;
+    root.board.board[8][1] = CellContent::Opponent;
+    root.board.board[7][2] = CellContent::Opponent;
+    root.board.board[6][3] = CellContent::Opponent;
+    root.board.board[5][4] = CellContent::Opponent;
+
+    assert_expected_move(&mut root, 5, 4);
+}
+
+#[test]
+fn test_detect_down_right_diagonal_up_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[1][1] = CellContent::Opponent;
+    root.board.board[2][2] = CellContent::Opponent;
+    root.board.board[3][3] = CellContent::Opponent;
+    root.board.board[4][4] = CellContent::Opponent;
+    root.board.board[5][5] = CellContent::Ally;
+
+    assert_expected_move(&mut root, 0, 0);
+}
+
+#[test]
+fn test_detect_down_right_diagonal_down_immediate_lose() {
+    let mut root = TreeRoot::new(Board::new());
+
+    assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
+
+    root.board.board[0][0] = CellContent::Ally;
+    root.board.board[1][1] = CellContent::Opponent;
+    root.board.board[2][2] = CellContent::Opponent;
+    root.board.board[3][3] = CellContent::Opponent;
+    root.board.board[4][4] = CellContent::Opponent;
+
+    assert_expected_move(&mut root, 5, 5);
 }
