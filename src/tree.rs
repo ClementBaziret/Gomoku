@@ -333,6 +333,9 @@ fn check_lose_move_evaluation() {
     assert_eq!(move_value, -1000000);
 }
 
+// -----------
+
+#[cfg(test)]
 fn assert_expected_move(root: &mut TreeRoot, x: u8, y: u8) {
     root.tree = Tree::gen_tree(&mut root.board, 1);
 

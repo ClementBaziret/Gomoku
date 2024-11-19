@@ -142,11 +142,12 @@ mod tests {
             (5, 5, Stone::Opponent),
             (5, 6, Stone::Opponent),
             (5, 7, Stone::Opponent),
+            (5, 8, Stone::Ally),
         ]);
 
         let ai_move = ai.play();
 
-        assert!(ai_move == (5, 2) || ai_move == (5, 8));
+        assert_eq!(ai_move, (5, 3));
     }
 
     #[test]
@@ -154,6 +155,7 @@ mod tests {
         let mut ai = Ai::new();
 
         ai.set_board(&[
+            (0, 1, Stone::Ally),
             (1, 1, Stone::Opponent),
             (2, 1, Stone::Opponent),
             (3, 1, Stone::Opponent),
@@ -162,7 +164,7 @@ mod tests {
 
         let ai_move = ai.play();
 
-        assert!(ai_move == (0, 1) || ai_move == (5, 1));
+        assert_eq!(ai_move, (5, 1));
     }
 
     #[test]
@@ -170,6 +172,7 @@ mod tests {
         let mut ai = Ai::new();
 
         ai.set_board(&[
+            (6, 0, Stone::Ally),
             (5, 1, Stone::Opponent),
             (4, 2, Stone::Opponent),
             (3, 3, Stone::Opponent),
@@ -178,7 +181,7 @@ mod tests {
 
         let ai_move = ai.play();
 
-        assert!(ai_move == (6, 0) || ai_move == (1, 5));
+        assert_eq!(ai_move, (1, 5));
     }
 
     #[test]
