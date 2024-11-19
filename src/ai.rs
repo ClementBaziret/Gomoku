@@ -133,7 +133,6 @@ mod tests {
         assert!(ai_move == (0, 0) || ai_move == (5, 5));
     }
 
-    #[ignore]
     #[test]
     fn horizontal_lose() {
         let mut ai = Ai::new();
@@ -150,7 +149,6 @@ mod tests {
         assert!(ai_move == (5, 2) || ai_move == (5, 8));
     }
 
-    #[ignore]
     #[test]
     fn vertical_lose() {
         let mut ai = Ai::new();
@@ -167,7 +165,6 @@ mod tests {
         assert!(ai_move == (0, 1) || ai_move == (5, 1));
     }
 
-    #[ignore]
     #[test]
     fn up_right_diagonal_lose() {
         let mut ai = Ai::new();
@@ -184,7 +181,6 @@ mod tests {
         assert!(ai_move == (6, 0) || ai_move == (1, 5));
     }
 
-    #[ignore]
     #[test]
     fn down_right_diagonal_lose() {
         let mut ai = Ai::new();
