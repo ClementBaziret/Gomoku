@@ -4,7 +4,8 @@ use std::{
     i32,
 };
 
-use crate::{board::Board, evaluation::evaluate, model::CellContent};
+use crate::evaluation::{evaluate, FIVE_IN_A_ROW};
+use crate::{board::Board, model::CellContent};
 
 #[derive(Debug, PartialEq)]
 pub struct AllyMove {
@@ -239,7 +240,9 @@ where
 
     let ret = 'score: {
         let lose_win_score = evaluate(board);
-        if lose_win_score > 500000 || lose_win_score < -500000 {
+        if lose_win_score >= (FIVE_IN_A_ROW * 3 / 4)
+            || lose_win_score <= (-FIVE_IN_A_ROW * 3 / 4)
+        {
             break 'score lose_win_score;
         }
 
@@ -341,7 +344,7 @@ fn check_lose_move_evaluation() {
     assert_eq!(move_value, -1000000);
 }
 
-// -----------
+// ----------- Units tests -----------
 
 #[cfg(test)]
 fn assert_expected_move(root: &mut TreeRoot, x: u8, y: u8) {
@@ -604,23 +607,18 @@ fn test_detect_down_right_diagonal_down_immediate_lose() {
     assert_expected_move(&mut root, 5, 5);
 }
 
-#[ignore = "fail but we need to make this PR through"]
 #[test]
 fn test_immediate_lose_with_potential_victory() {
     let mut root = TreeRoot::new(Board::new());
 
     assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
 
-    // root.board.board[2][2] = CellContent::Ally;
-    // root.board.board[2][3] = CellContent::Ally;
     root.board.board[2][4] = CellContent::Ally;
     root.board.board[2][5] = CellContent::Ally;
 
     root.board.board[3][6] = CellContent::Opponent;
     root.board.board[4][5] = CellContent::Opponent;
     root.board.board[5][4] = CellContent::Opponent;
-    // root.board.board[6][3] = CellContent::Opponent;
-    root.board.print_board();
 
     let (x, y) = root.board.calculate_next_move();
     assert_eq!((x, y), (7, 2));
@@ -632,8 +630,6 @@ fn test_priority_immediate_win() {
 
     assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
 
-    // root.board.board[2][2] = CellContent::Ally;
-    // root.board.board[2][3] = CellContent::Ally;
     root.board.board[0][4] = CellContent::Opponent;
     root.board.board[1][4] = CellContent::Ally;
     root.board.board[2][4] = CellContent::Ally;
@@ -647,8 +643,6 @@ fn test_priority_immediate_win() {
     root.board.board[4][5] = CellContent::Opponent;
 
     let (x, y) = root.board.calculate_next_move();
-    root.board.board[y as usize][x as usize] = CellContent::Ally;
-    root.board.print_board();
     assert_eq!((x, y), (4, 5));
 }
 
@@ -658,8 +652,6 @@ fn test_priority_immediate_win_reversed() {
 
     assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
 
-    // root.board.board[2][2] = CellContent::Ally;
-    // root.board.board[2][3] = CellContent::Ally;
     root.board.board[0][6] = CellContent::Opponent;
     root.board.board[1][6] = CellContent::Ally;
     root.board.board[2][6] = CellContent::Ally;
@@ -673,8 +665,6 @@ fn test_priority_immediate_win_reversed() {
     root.board.board[4][5] = CellContent::Opponent;
 
     let (x, y) = root.board.calculate_next_move();
-    root.board.board[y as usize][x as usize] = CellContent::Ally;
-    root.board.print_board();
     assert_eq!((x, y), (6, 5));
 }
 
@@ -684,8 +674,6 @@ fn test_priority_immediate_lose() {
 
     assert_eq!(root.board.board, [[CellContent::Empty; 20]; 20]);
 
-    // root.board.board[2][2] = CellContent::Ally;
-    // root.board.board[2][3] = CellContent::Ally;
     root.board.board[0][4] = CellContent::Ally;
     root.board.board[1][4] = CellContent::Opponent;
     root.board.board[2][4] = CellContent::Opponent;
@@ -698,7 +686,5 @@ fn test_priority_immediate_lose() {
     root.board.board[3][5] = CellContent::Ally;
 
     let (x, y) = root.board.calculate_next_move();
-    root.board.board[y as usize][x as usize] = CellContent::Ally;
-    root.board.print_board();
     assert_eq!((x, y), (4, 5));
 }
