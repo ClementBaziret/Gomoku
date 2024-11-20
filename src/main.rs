@@ -5,6 +5,7 @@ mod grid_iterators;
 mod model;
 mod parser;
 mod traits;
+mod tree;
 
 use parser::Parser;
 
