@@ -8,13 +8,19 @@ use crate::{
     },
 };
 
+const FIVE_IN_A_ROW: i32 = 1000000;
+const FOUR_IN_A_ROW_OPEN: i32 = 5000;
+const FOUR_IN_A_ROW_CLOSED: i32 = 2000;
+const THREE_IN_A_ROW: i32 = 1000;
+const TWO_IN_A_ROW: i32 = 100;
+
 fn check_for_5(temp: &Vec<&CellContent>) -> i32 {
     for window in temp.windows(5) {
         if window == &[&CellContent::Ally; 5] {
-            return 1000000;
+            return FIVE_IN_A_ROW;
         }
         if window == &[&CellContent::Opponent; 5] {
-            return -1000000;
+            return -FIVE_IN_A_ROW;
         }
     }
     0
@@ -32,7 +38,7 @@ fn check_for_4_open(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return 5000;
+            return FOUR_IN_A_ROW_OPEN;
         }
         if window
             == &[
@@ -44,7 +50,7 @@ fn check_for_4_open(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return -5000;
+            return -FOUR_IN_A_ROW_OPEN;
         }
     }
     0
@@ -71,7 +77,7 @@ fn check_for_4_closed(temp: &Vec<&CellContent>) -> i32 {
                     &CellContent::Opponent,
                 ]
         {
-            return 2000;
+            return FOUR_IN_A_ROW_CLOSED;
         }
         if window
             == &[
@@ -92,7 +98,7 @@ fn check_for_4_closed(temp: &Vec<&CellContent>) -> i32 {
                     &CellContent::Ally,
                 ]
         {
-            return -2000;
+            return -FOUR_IN_A_ROW_CLOSED;
         }
     }
     0
@@ -109,7 +115,7 @@ fn check_for_3(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return 1000;
+            return THREE_IN_A_ROW;
         }
         if window
             == &[
@@ -120,7 +126,7 @@ fn check_for_3(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return -1000;
+            return -THREE_IN_A_ROW;
         }
     }
     0
@@ -136,7 +142,7 @@ fn check_for_2(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return 100;
+            return TWO_IN_A_ROW;
         }
         if window
             == &[
@@ -146,7 +152,7 @@ fn check_for_2(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return -100;
+            return -TWO_IN_A_ROW;
         }
     }
     0
@@ -270,7 +276,7 @@ case is based on a newly created board, with several cases inside.        */
 #[test]
 fn evaluate_horizontal_5_in_a_row_1_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Ally;
@@ -287,7 +293,7 @@ fn evaluate_horizontal_5_in_a_row_1_ally() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_2_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Ally;
@@ -304,7 +310,7 @@ fn evaluate_horizontal_5_in_a_row_2_ally() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_3_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[19][0] = CellContent::Ally;
@@ -321,7 +327,7 @@ fn evaluate_horizontal_5_in_a_row_3_ally() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_4_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Ally;
@@ -338,7 +344,7 @@ fn evaluate_horizontal_5_in_a_row_4_ally() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_5_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Ally;
@@ -355,7 +361,7 @@ fn evaluate_horizontal_5_in_a_row_5_ally() {
 #[test]
 fn evaluate_vertical_5_in_a_row_1_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Ally;
@@ -372,7 +378,7 @@ fn evaluate_vertical_5_in_a_row_1_ally() {
 #[test]
 fn evaluate_vertical_5_in_a_row_2_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Ally;
@@ -389,7 +395,7 @@ fn evaluate_vertical_5_in_a_row_2_ally() {
 #[test]
 fn evaluate_vertical_5_in_a_row_3_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Ally;
@@ -406,7 +412,7 @@ fn evaluate_vertical_5_in_a_row_3_ally() {
 #[test]
 fn evaluate_vertical_5_in_a_row_4_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Ally;
@@ -423,7 +429,7 @@ fn evaluate_vertical_5_in_a_row_4_ally() {
 #[test]
 fn evaluate_vertical_5_in_a_row_5_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Ally;
@@ -440,7 +446,7 @@ fn evaluate_vertical_5_in_a_row_5_ally() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_1_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[4][0] = CellContent::Ally;
@@ -457,7 +463,7 @@ fn evaluate_diag_up_right_5_in_a_row_1_ally() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_2_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[14][0] = CellContent::Ally;
@@ -474,7 +480,7 @@ fn evaluate_diag_up_right_5_in_a_row_2_ally() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_3_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[4][10] = CellContent::Ally;
@@ -491,7 +497,7 @@ fn evaluate_diag_up_right_5_in_a_row_3_ally() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_4_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[14][10] = CellContent::Ally;
@@ -508,7 +514,7 @@ fn evaluate_diag_up_right_5_in_a_row_4_ally() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_5_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[19][0] = CellContent::Ally;
@@ -525,7 +531,7 @@ fn evaluate_diag_up_right_5_in_a_row_5_ally() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_1_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Ally;
@@ -542,7 +548,7 @@ fn evaluate_diag_up_left_5_in_a_row_1_ally() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_2_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Ally;
@@ -559,7 +565,7 @@ fn evaluate_diag_up_left_5_in_a_row_2_ally() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_3_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Ally;
@@ -576,7 +582,7 @@ fn evaluate_diag_up_left_5_in_a_row_3_ally() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_4_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Ally;
@@ -593,7 +599,7 @@ fn evaluate_diag_up_left_5_in_a_row_4_ally() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_5_ally() {
     let result;
-    let target_result = 1000000;
+    let target_result = FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[15][10] = CellContent::Ally;
@@ -610,7 +616,7 @@ fn evaluate_diag_up_left_5_in_a_row_5_ally() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_1_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Opponent;
@@ -627,7 +633,7 @@ fn evaluate_horizontal_5_in_a_row_1_opp() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_2_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Opponent;
@@ -644,7 +650,7 @@ fn evaluate_horizontal_5_in_a_row_2_opp() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_3_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[19][0] = CellContent::Opponent;
@@ -661,7 +667,7 @@ fn evaluate_horizontal_5_in_a_row_3_opp() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_4_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Opponent;
@@ -678,7 +684,7 @@ fn evaluate_horizontal_5_in_a_row_4_opp() {
 #[test]
 fn evaluate_horizontal_5_in_a_row_5_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Opponent;
@@ -695,7 +701,7 @@ fn evaluate_horizontal_5_in_a_row_5_opp() {
 #[test]
 fn evaluate_vertical_5_in_a_row_1_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Opponent;
@@ -712,7 +718,7 @@ fn evaluate_vertical_5_in_a_row_1_opp() {
 #[test]
 fn evaluate_vertical_5_in_a_row_2_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Opponent;
@@ -729,7 +735,7 @@ fn evaluate_vertical_5_in_a_row_2_opp() {
 #[test]
 fn evaluate_vertical_5_in_a_row_3_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Opponent;
@@ -746,7 +752,7 @@ fn evaluate_vertical_5_in_a_row_3_opp() {
 #[test]
 fn evaluate_vertical_5_in_a_row_4_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Opponent;
@@ -763,7 +769,7 @@ fn evaluate_vertical_5_in_a_row_4_opp() {
 #[test]
 fn evaluate_vertical_5_in_a_row_5_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Opponent;
@@ -780,7 +786,7 @@ fn evaluate_vertical_5_in_a_row_5_opp() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_1_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[4][0] = CellContent::Opponent;
@@ -797,7 +803,7 @@ fn evaluate_diag_up_right_5_in_a_row_1_opp() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_2_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[14][0] = CellContent::Opponent;
@@ -814,7 +820,7 @@ fn evaluate_diag_up_right_5_in_a_row_2_opp() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_3_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[4][10] = CellContent::Opponent;
@@ -831,7 +837,7 @@ fn evaluate_diag_up_right_5_in_a_row_3_opp() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_4_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[14][10] = CellContent::Opponent;
@@ -848,7 +854,7 @@ fn evaluate_diag_up_right_5_in_a_row_4_opp() {
 #[test]
 fn evaluate_diag_up_right_5_in_a_row_5_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[19][0] = CellContent::Opponent;
@@ -865,7 +871,7 @@ fn evaluate_diag_up_right_5_in_a_row_5_opp() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_1_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][0] = CellContent::Opponent;
@@ -882,7 +888,7 @@ fn evaluate_diag_up_left_5_in_a_row_1_opp() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_2_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][0] = CellContent::Opponent;
@@ -899,7 +905,7 @@ fn evaluate_diag_up_left_5_in_a_row_2_opp() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_3_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[0][10] = CellContent::Opponent;
@@ -916,7 +922,7 @@ fn evaluate_diag_up_left_5_in_a_row_3_opp() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_4_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[10][10] = CellContent::Opponent;
@@ -933,7 +939,7 @@ fn evaluate_diag_up_left_5_in_a_row_4_opp() {
 #[test]
 fn evaluate_diag_up_left_5_in_a_row_5_opp() {
     let result;
-    let target_result = -1000000;
+    let target_result = -FIVE_IN_A_ROW;
     let mut board: Board = Board::new();
 
     board.board[15][10] = CellContent::Opponent;
@@ -951,7 +957,7 @@ fn evaluate_diag_up_left_5_in_a_row_5_opp() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_1_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[0][1] = CellContent::Ally;
@@ -967,7 +973,7 @@ fn evaluate_horizontal_4_in_a_row_1_ally() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_2_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[10][1] = CellContent::Ally;
@@ -983,7 +989,7 @@ fn evaluate_horizontal_4_in_a_row_2_ally() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_3_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[19][1] = CellContent::Ally;
@@ -999,7 +1005,7 @@ fn evaluate_horizontal_4_in_a_row_3_ally() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_4_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[0][11] = CellContent::Ally;
@@ -1015,7 +1021,7 @@ fn evaluate_horizontal_4_in_a_row_4_ally() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_5_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[10][11] = CellContent::Ally;
@@ -1031,7 +1037,7 @@ fn evaluate_horizontal_4_in_a_row_5_ally() {
 #[test]
 fn evaluate_vertical_4_in_a_row_1_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][0] = CellContent::Ally;
@@ -1047,7 +1053,7 @@ fn evaluate_vertical_4_in_a_row_1_ally() {
 #[test]
 fn evaluate_vertical_4_in_a_row_2_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][10] = CellContent::Ally;
@@ -1063,7 +1069,7 @@ fn evaluate_vertical_4_in_a_row_2_ally() {
 #[test]
 fn evaluate_vertical_4_in_a_row_3_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][0] = CellContent::Ally;
@@ -1079,7 +1085,7 @@ fn evaluate_vertical_4_in_a_row_3_ally() {
 #[test]
 fn evaluate_vertical_4_in_a_row_4_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][0] = CellContent::Ally;
@@ -1095,7 +1101,7 @@ fn evaluate_vertical_4_in_a_row_4_ally() {
 #[test]
 fn evaluate_vertical_4_in_a_row_5_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][10] = CellContent::Ally;
@@ -1111,7 +1117,7 @@ fn evaluate_vertical_4_in_a_row_5_ally() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_1_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[4][1] = CellContent::Ally;
@@ -1127,7 +1133,7 @@ fn evaluate_diag_up_right_4_in_a_row_1_ally() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_2_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[13][1] = CellContent::Ally;
@@ -1143,7 +1149,7 @@ fn evaluate_diag_up_right_4_in_a_row_2_ally() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_3_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[4][10] = CellContent::Ally;
@@ -1159,7 +1165,7 @@ fn evaluate_diag_up_right_4_in_a_row_3_ally() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_4_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[13][11] = CellContent::Ally;
@@ -1175,7 +1181,7 @@ fn evaluate_diag_up_right_4_in_a_row_4_ally() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_5_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[18][1] = CellContent::Ally;
@@ -1191,7 +1197,7 @@ fn evaluate_diag_up_right_4_in_a_row_5_ally() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_1_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][1] = CellContent::Ally;
@@ -1207,7 +1213,7 @@ fn evaluate_diag_up_left_4_in_a_row_1_ally() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_2_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][1] = CellContent::Ally;
@@ -1223,7 +1229,7 @@ fn evaluate_diag_up_left_4_in_a_row_2_ally() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_3_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][11] = CellContent::Ally;
@@ -1239,7 +1245,7 @@ fn evaluate_diag_up_left_4_in_a_row_3_ally() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_4_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][11] = CellContent::Ally;
@@ -1255,7 +1261,7 @@ fn evaluate_diag_up_left_4_in_a_row_4_ally() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_5_ally() {
     let result;
-    let target_result = 5000;
+    let target_result = FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[15][10] = CellContent::Ally;
@@ -1271,7 +1277,7 @@ fn evaluate_diag_up_left_4_in_a_row_5_ally() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_1_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[0][1] = CellContent::Opponent;
@@ -1287,7 +1293,7 @@ fn evaluate_horizontal_4_in_a_row_1_opp() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_2_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[10][1] = CellContent::Opponent;
@@ -1303,7 +1309,7 @@ fn evaluate_horizontal_4_in_a_row_2_opp() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_3_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[19][1] = CellContent::Opponent;
@@ -1319,7 +1325,7 @@ fn evaluate_horizontal_4_in_a_row_3_opp() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_4_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[0][11] = CellContent::Opponent;
@@ -1335,7 +1341,7 @@ fn evaluate_horizontal_4_in_a_row_4_opp() {
 #[test]
 fn evaluate_horizontal_4_in_a_row_5_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[10][11] = CellContent::Opponent;
@@ -1351,7 +1357,7 @@ fn evaluate_horizontal_4_in_a_row_5_opp() {
 #[test]
 fn evaluate_vertical_4_in_a_row_1_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][0] = CellContent::Opponent;
@@ -1367,7 +1373,7 @@ fn evaluate_vertical_4_in_a_row_1_opp() {
 #[test]
 fn evaluate_vertical_4_in_a_row_2_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][10] = CellContent::Opponent;
@@ -1383,7 +1389,7 @@ fn evaluate_vertical_4_in_a_row_2_opp() {
 #[test]
 fn evaluate_vertical_4_in_a_row_3_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][0] = CellContent::Opponent;
@@ -1399,7 +1405,7 @@ fn evaluate_vertical_4_in_a_row_3_opp() {
 #[test]
 fn evaluate_vertical_4_in_a_row_4_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][0] = CellContent::Opponent;
@@ -1415,7 +1421,7 @@ fn evaluate_vertical_4_in_a_row_4_opp() {
 #[test]
 fn evaluate_vertical_4_in_a_row_5_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][10] = CellContent::Opponent;
@@ -1431,7 +1437,7 @@ fn evaluate_vertical_4_in_a_row_5_opp() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_1_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[4][1] = CellContent::Opponent;
@@ -1447,7 +1453,7 @@ fn evaluate_diag_up_right_4_in_a_row_1_opp() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_2_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[13][1] = CellContent::Opponent;
@@ -1463,7 +1469,7 @@ fn evaluate_diag_up_right_4_in_a_row_2_opp() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_3_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[4][10] = CellContent::Opponent;
@@ -1479,7 +1485,7 @@ fn evaluate_diag_up_right_4_in_a_row_3_opp() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_4_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[13][11] = CellContent::Opponent;
@@ -1495,7 +1501,7 @@ fn evaluate_diag_up_right_4_in_a_row_4_opp() {
 #[test]
 fn evaluate_diag_up_right_4_in_a_row_5_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[18][1] = CellContent::Opponent;
@@ -1511,7 +1517,7 @@ fn evaluate_diag_up_right_4_in_a_row_5_opp() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_1_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][1] = CellContent::Opponent;
@@ -1527,7 +1533,7 @@ fn evaluate_diag_up_left_4_in_a_row_1_opp() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_2_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][1] = CellContent::Opponent;
@@ -1543,7 +1549,7 @@ fn evaluate_diag_up_left_4_in_a_row_2_opp() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_3_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[1][11] = CellContent::Opponent;
@@ -1559,7 +1565,7 @@ fn evaluate_diag_up_left_4_in_a_row_3_opp() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_4_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[11][11] = CellContent::Opponent;
@@ -1575,7 +1581,7 @@ fn evaluate_diag_up_left_4_in_a_row_4_opp() {
 #[test]
 fn evaluate_diag_up_left_4_in_a_row_5_opp() {
     let result;
-    let target_result = -5000;
+    let target_result = -FOUR_IN_A_ROW_OPEN;
     let mut board: Board = Board::new();
 
     board.board[15][10] = CellContent::Opponent;
