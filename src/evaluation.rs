@@ -1,4 +1,5 @@
 use std::cell::Cell;
+use std::slice::Windows;
 
 use crate::model::CellContent;
 use crate::{
@@ -11,8 +12,10 @@ use crate::{
 const FIVE_IN_A_ROW: i32 = 1000000;
 const FOUR_IN_A_ROW_OPEN: i32 = 5000;
 const FOUR_IN_A_ROW_CLOSED: i32 = 2000;
-const THREE_IN_A_ROW: i32 = 1000;
-const TWO_IN_A_ROW: i32 = 100;
+const THREE_IN_A_ROW_OPEN: i32 = 1000;
+const THREE_IN_A_ROW_CLOSED: i32 = 800;
+const MISC: i32 = 200;
+const TWO_IN_A_ROW: i32 = 500;
 
 fn check_for_5(temp: &Vec<&CellContent>) -> i32 {
     for window in temp.windows(5) {
@@ -53,10 +56,96 @@ fn check_for_4_open(temp: &Vec<&CellContent>) -> i32 {
             return -FOUR_IN_A_ROW_OPEN;
         }
     }
+    for window in temp.windows(8) {
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+            ]
+        {
+            return FOUR_IN_A_ROW_OPEN;
+        }
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+            ]
+        {
+            return -FOUR_IN_A_ROW_OPEN;
+        }
+    }
+    for window in temp.windows(9) {
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
+            ]
+        {
+            return FOUR_IN_A_ROW_OPEN;
+        }
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+            ]
+        {
+            return -FOUR_IN_A_ROW_OPEN;
+        }
+    }
     0
 }
 
 fn check_for_4_closed(temp: &Vec<&CellContent>) -> i32 {
+    for window in temp.windows(5) {
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+            ]
+        {
+            return FOUR_IN_A_ROW_CLOSED;
+        }
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+            ]
+        {
+            return -FOUR_IN_A_ROW_CLOSED;
+        }
+    }
     for window in temp.windows(6) {
         if window
             == &[
@@ -104,7 +193,101 @@ fn check_for_4_closed(temp: &Vec<&CellContent>) -> i32 {
     0
 }
 
-fn check_for_3(temp: &Vec<&CellContent>) -> i32 {
+fn check_for_3_open(temp: &Vec<&CellContent>) -> i32 {
+    for window in temp.windows(7) {
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Empty,
+            ]
+        {
+            return THREE_IN_A_ROW_OPEN;
+        }
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Empty,
+            ]
+        {
+            return -THREE_IN_A_ROW_OPEN;
+        }
+    }
+    for window in temp.windows(8) {
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+            ]
+        {
+            return THREE_IN_A_ROW_OPEN;
+        }
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+            ]
+        {
+            return -THREE_IN_A_ROW_OPEN;
+        }
+    }
+    for window in temp.windows(9) {
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+            ]
+        {
+            return THREE_IN_A_ROW_OPEN;
+        }
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+            ]
+        {
+            return -THREE_IN_A_ROW_OPEN;
+        }
+    }
+    0
+}
+
+fn check_for_3_closed(temp: &Vec<&CellContent>) -> i32 {
     for window in temp.windows(5) {
         if window
             == &[
@@ -115,7 +298,7 @@ fn check_for_3(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return THREE_IN_A_ROW;
+            return THREE_IN_A_ROW_CLOSED;
         }
         if window
             == &[
@@ -126,7 +309,168 @@ fn check_for_3(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
             ]
         {
-            return -THREE_IN_A_ROW;
+            return -THREE_IN_A_ROW_CLOSED;
+        }
+    }
+    for window in temp.windows(6) {
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+            ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                ]
+        {
+            return THREE_IN_A_ROW_CLOSED;
+        }
+        if window
+            == &[
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+            ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                ]
+        {
+            return -THREE_IN_A_ROW_CLOSED;
+        }
+    }
+    0
+}
+
+fn check_for_other(temp: &Vec<&CellContent>) -> i32 {
+    for window in temp.windows(4) {
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Ally,
+                &CellContent::Ally,
+                &CellContent::Empty,
+            ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Ally,
+                    &CellContent::Opponent,
+                ]
+        {
+            return MISC;
+        }
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Opponent,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+            ]
+            || window
+                == &[
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Opponent,
+                    &CellContent::Ally,
+                ]
+        {
+            return -MISC;
+        }
+    }
+    for window in temp.windows(6) {
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+            ]
+            || window
+                == &[
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                ]
+        {
+            return MISC;
+        }
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Ally,
+            ]
+            || window
+                == &[
+                    &CellContent::Ally,
+                    &CellContent::Empty,
+                    &CellContent::Empty,
+                    &CellContent::Opponent,
+                    &CellContent::Empty,
+                    &CellContent::Ally,
+                ]
+        {
+            return -MISC;
+        }
+    }
+    for window in temp.windows(9) {
+        if window
+            == &[
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+            ]
+        {
+            return MISC;
+        }
+        if window
+            == &[
+                &CellContent::Ally,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Opponent,
+                &CellContent::Empty,
+                &CellContent::Empty,
+                &CellContent::Ally,
+            ]
+
+        {
+            return -MISC;
         }
     }
     0
@@ -158,50 +502,6 @@ fn check_for_2(temp: &Vec<&CellContent>) -> i32 {
     0
 }
 
-fn check_for_other(temp: &Vec<&CellContent>) -> i32 {
-    for window in temp.windows(5) {
-        if window
-            == &[
-                &CellContent::Ally,
-                &CellContent::Empty,
-                &CellContent::Ally,
-                &CellContent::Ally,
-                &CellContent::Empty,
-            ]
-            || window
-                == &[
-                    &CellContent::Empty,
-                    &CellContent::Ally,
-                    &CellContent::Ally,
-                    &CellContent::Empty,
-                    &CellContent::Ally,
-                ]
-        {
-            return 800;
-        }
-        if window
-            == &[
-                &CellContent::Opponent,
-                &CellContent::Empty,
-                &CellContent::Opponent,
-                &CellContent::Opponent,
-                &CellContent::Empty,
-            ]
-            || window
-                == &[
-                    &CellContent::Empty,
-                    &CellContent::Opponent,
-                    &CellContent::Opponent,
-                    &CellContent::Empty,
-                    &CellContent::Opponent,
-                ]
-        {
-            return -800;
-        }
-    }
-    0
-}
-
 fn iterate_row(temp: Vec<&CellContent>) -> i32 {
     let mut result;
 
@@ -217,7 +517,11 @@ fn iterate_row(temp: Vec<&CellContent>) -> i32 {
     if result != 0 {
         return result;
     }
-    result = check_for_3(&temp);
+    result = check_for_3_open(&temp);
+    if result != 0 {
+        return result;
+    }
+    result = check_for_3_closed(&temp);
     if result != 0 {
         return result;
     }
