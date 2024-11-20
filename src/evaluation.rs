@@ -9,13 +9,13 @@ use crate::{
     },
 };
 
-const FIVE_IN_A_ROW: i32 = 1000000;
-const FOUR_IN_A_ROW_OPEN: i32 = 5000;
-const FOUR_IN_A_ROW_CLOSED: i32 = 2000;
-const THREE_IN_A_ROW_OPEN: i32 = 1000;
-const THREE_IN_A_ROW_CLOSED: i32 = 800;
-const MISC: i32 = 200;
-const TWO_IN_A_ROW: i32 = 500;
+pub const FIVE_IN_A_ROW: i32 = 1000000;
+pub const FOUR_IN_A_ROW_OPEN: i32 = 5000;
+pub const FOUR_IN_A_ROW_CLOSED: i32 = 2000;
+pub const THREE_IN_A_ROW_OPEN: i32 = 1000;
+pub const THREE_IN_A_ROW_CLOSED: i32 = 800;
+pub const MISC: i32 = 200;
+pub const TWO_IN_A_ROW: i32 = 500;
 
 fn check_for_5(temp: &Vec<&CellContent>) -> i32 {
     for window in temp.windows(5) {
@@ -468,7 +468,6 @@ fn check_for_other(temp: &Vec<&CellContent>) -> i32 {
                 &CellContent::Empty,
                 &CellContent::Ally,
             ]
-
         {
             return -MISC;
         }
