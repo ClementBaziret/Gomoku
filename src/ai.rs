@@ -8,7 +8,7 @@ pub struct Ai {
 
 impl Ai {
     const ABOUT_MAP: [(&'static str, &'static str); 4] = [
-        ("name", "MyAi"),
+        ("name", "Patrice"),
         ("version", "0.1"),
         ("author", "L'eau ça rouille"),
         ("country", "France"),
