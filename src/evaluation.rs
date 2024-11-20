@@ -1,6 +1,3 @@
-use std::cell::Cell;
-use std::slice::Windows;
-
 use crate::model::CellContent;
 use crate::{
     board::Board,
@@ -14,8 +11,8 @@ pub const FOUR_IN_A_ROW_OPEN: i32 = 5000;
 pub const FOUR_IN_A_ROW_CLOSED: i32 = 2000;
 pub const THREE_IN_A_ROW_OPEN: i32 = 1000;
 pub const THREE_IN_A_ROW_CLOSED: i32 = 800;
-pub const MISC: i32 = 200;
 pub const TWO_IN_A_ROW: i32 = 500;
+pub const MISC: i32 = 200;
 
 fn check_for_5(temp: &Vec<&CellContent>) -> i32 {
     for window in temp.windows(5) {
