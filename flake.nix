@@ -1,6 +1,6 @@
 {
   description = '':
-    Gomoku "l'eau ça rouille" Flake
+    Gomoku AI "Patrice" by "l'eau ça rouille" Flake
   '';
 
   inputs = {
