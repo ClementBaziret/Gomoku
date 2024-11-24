@@ -1,3 +1,6 @@
+use crate::grid_iterators::GridColumns;
+use crate::grid_iterators::GridDownRightDiagonals;
+use crate::grid_iterators::GridUpRightDiagonals;
 use crate::model::CellContent;
 use crate::tree::evaluate_move_recursive;
 use crate::tree::AllyMove;
@@ -118,5 +121,52 @@ impl Board {
 
         self.board[y as usize][x as usize] = CellContent::Ally;
         (x, y)
+    }
+
+    pub fn rows(&self) -> std::slice::Iter<'_, [CellContent; 20]> {
+        self.board.iter()
+    }
+
+    pub fn columns(&self) -> GridColumns<CellContent, 20, 20> {
+        GridColumns::new(&self.board)
+    }
+
+    pub fn up_right_diagonals(
+        &self,
+    ) -> GridUpRightDiagonals<CellContent, 20, 20> {
+        GridUpRightDiagonals::new(&self.board)
+    }
+
+    pub fn down_right_diagonals(
+        &self,
+    ) -> GridDownRightDiagonals<CellContent, 20, 20> {
+        GridDownRightDiagonals::new(&self.board)
+    }
+
+    pub fn in_any_direction<F>(&self, mut f: F) -> bool
+    where
+        F: FnMut(&[&CellContent]) -> bool,
+    {
+        for row in self.rows() {
+            if f(row.iter().collect::<Vec<_>>().as_slice()) {
+                return true;
+            }
+        }
+        for col in self.columns() {
+            if f(col.collect::<Vec<_>>().as_slice()) {
+                return true;
+            }
+        }
+        for diag in self.up_right_diagonals() {
+            if f(diag.collect::<Vec<_>>().as_slice()) {
+                return true;
+            }
+        }
+        for diag in self.down_right_diagonals() {
+            if f(diag.collect::<Vec<_>>().as_slice()) {
+                return true;
+            }
+        }
+        false
     }
 }
