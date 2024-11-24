@@ -14,14 +14,20 @@ pub const THREE_IN_A_ROW_CLOSED: i32 = 800;
 pub const TWO_IN_A_ROW: i32 = 500;
 pub const MISC: i32 = 200;
 
+fn check_five_aligned(
+    line: &Vec<&CellContent>,
+    stone: Stone,
+) -> bool {
+    line.windows(5)
+        .any(|w| w == &[&CellContent::from(stone); 5])
+}
+
 fn check_for_5(temp: &Vec<&CellContent>) -> i32 {
-    for window in temp.windows(5) {
-        if window == &[&CellContent::Ally; 5] {
-            return FIVE_IN_A_ROW;
-        }
-        if window == &[&CellContent::Opponent; 5] {
-            return -FIVE_IN_A_ROW;
-        }
+    if check_five_aligned(temp, Stone::Ally) {
+        return FIVE_IN_A_ROW;
+    }
+    if check_five_aligned(temp, Stone::Opponent) {
+        return -FIVE_IN_A_ROW;
     }
     0
 }
