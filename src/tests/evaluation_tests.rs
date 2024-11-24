@@ -1,7 +1,7 @@
 use crate::board::Board;
 use crate::evaluation::evaluate;
 use crate::evaluation::{FIVE_IN_A_ROW, FOUR_IN_A_ROW_OPEN};
-use crate::model::CellContent;
+use crate::model::{CellContent, Stone};
 
 // 5 in-a-row
 #[test]
@@ -16,7 +16,7 @@ fn evaluate_horizontal_5_in_a_row_1_ally() {
     board.board[0][3] = CellContent::Ally;
     board.board[0][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -33,7 +33,7 @@ fn evaluate_horizontal_5_in_a_row_2_ally() {
     board.board[10][3] = CellContent::Ally;
     board.board[10][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -50,7 +50,7 @@ fn evaluate_horizontal_5_in_a_row_3_ally() {
     board.board[19][3] = CellContent::Ally;
     board.board[19][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -67,7 +67,7 @@ fn evaluate_horizontal_5_in_a_row_4_ally() {
     board.board[0][13] = CellContent::Ally;
     board.board[0][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -84,7 +84,7 @@ fn evaluate_horizontal_5_in_a_row_5_ally() {
     board.board[10][13] = CellContent::Ally;
     board.board[10][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -101,7 +101,7 @@ fn evaluate_vertical_5_in_a_row_1_ally() {
     board.board[3][0] = CellContent::Ally;
     board.board[4][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -118,7 +118,7 @@ fn evaluate_vertical_5_in_a_row_2_ally() {
     board.board[3][10] = CellContent::Ally;
     board.board[4][10] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -135,7 +135,7 @@ fn evaluate_vertical_5_in_a_row_3_ally() {
     board.board[13][0] = CellContent::Ally;
     board.board[14][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -152,7 +152,7 @@ fn evaluate_vertical_5_in_a_row_4_ally() {
     board.board[3][0] = CellContent::Ally;
     board.board[4][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -169,7 +169,7 @@ fn evaluate_vertical_5_in_a_row_5_ally() {
     board.board[13][10] = CellContent::Ally;
     board.board[14][10] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -186,7 +186,7 @@ fn evaluate_diag_up_right_5_in_a_row_1_ally() {
     board.board[1][3] = CellContent::Ally;
     board.board[0][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -203,7 +203,7 @@ fn evaluate_diag_up_right_5_in_a_row_2_ally() {
     board.board[11][3] = CellContent::Ally;
     board.board[10][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -220,7 +220,7 @@ fn evaluate_diag_up_right_5_in_a_row_3_ally() {
     board.board[1][13] = CellContent::Ally;
     board.board[0][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -237,7 +237,7 @@ fn evaluate_diag_up_right_5_in_a_row_4_ally() {
     board.board[11][13] = CellContent::Ally;
     board.board[10][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -254,7 +254,7 @@ fn evaluate_diag_up_right_5_in_a_row_5_ally() {
     board.board[16][3] = CellContent::Ally;
     board.board[15][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -271,7 +271,7 @@ fn evaluate_diag_up_left_5_in_a_row_1_ally() {
     board.board[3][3] = CellContent::Ally;
     board.board[4][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -288,7 +288,7 @@ fn evaluate_diag_up_left_5_in_a_row_2_ally() {
     board.board[13][3] = CellContent::Ally;
     board.board[14][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -305,7 +305,7 @@ fn evaluate_diag_up_left_5_in_a_row_3_ally() {
     board.board[3][13] = CellContent::Ally;
     board.board[4][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -322,7 +322,7 @@ fn evaluate_diag_up_left_5_in_a_row_4_ally() {
     board.board[13][13] = CellContent::Ally;
     board.board[14][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -339,7 +339,7 @@ fn evaluate_diag_up_left_5_in_a_row_5_ally() {
     board.board[18][13] = CellContent::Ally;
     board.board[19][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -356,7 +356,7 @@ fn evaluate_horizontal_5_in_a_row_1_opp() {
     board.board[0][3] = CellContent::Opponent;
     board.board[0][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -373,7 +373,7 @@ fn evaluate_horizontal_5_in_a_row_2_opp() {
     board.board[10][3] = CellContent::Opponent;
     board.board[10][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -390,7 +390,7 @@ fn evaluate_horizontal_5_in_a_row_3_opp() {
     board.board[19][3] = CellContent::Opponent;
     board.board[19][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -407,7 +407,7 @@ fn evaluate_horizontal_5_in_a_row_4_opp() {
     board.board[0][13] = CellContent::Opponent;
     board.board[0][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -424,7 +424,7 @@ fn evaluate_horizontal_5_in_a_row_5_opp() {
     board.board[10][13] = CellContent::Opponent;
     board.board[10][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -441,7 +441,7 @@ fn evaluate_vertical_5_in_a_row_1_opp() {
     board.board[3][0] = CellContent::Opponent;
     board.board[4][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -458,7 +458,7 @@ fn evaluate_vertical_5_in_a_row_2_opp() {
     board.board[3][10] = CellContent::Opponent;
     board.board[4][10] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -475,7 +475,7 @@ fn evaluate_vertical_5_in_a_row_3_opp() {
     board.board[13][0] = CellContent::Opponent;
     board.board[14][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -492,7 +492,7 @@ fn evaluate_vertical_5_in_a_row_4_opp() {
     board.board[3][0] = CellContent::Opponent;
     board.board[4][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -509,7 +509,7 @@ fn evaluate_vertical_5_in_a_row_5_opp() {
     board.board[13][10] = CellContent::Opponent;
     board.board[14][10] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -526,7 +526,7 @@ fn evaluate_diag_up_right_5_in_a_row_1_opp() {
     board.board[1][3] = CellContent::Opponent;
     board.board[0][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -543,7 +543,7 @@ fn evaluate_diag_up_right_5_in_a_row_2_opp() {
     board.board[11][3] = CellContent::Opponent;
     board.board[10][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -560,7 +560,7 @@ fn evaluate_diag_up_right_5_in_a_row_3_opp() {
     board.board[1][13] = CellContent::Opponent;
     board.board[0][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -577,7 +577,7 @@ fn evaluate_diag_up_right_5_in_a_row_4_opp() {
     board.board[11][13] = CellContent::Opponent;
     board.board[10][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -594,7 +594,7 @@ fn evaluate_diag_up_right_5_in_a_row_5_opp() {
     board.board[16][3] = CellContent::Opponent;
     board.board[15][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -611,7 +611,7 @@ fn evaluate_diag_up_left_5_in_a_row_1_opp() {
     board.board[3][3] = CellContent::Opponent;
     board.board[4][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -628,7 +628,7 @@ fn evaluate_diag_up_left_5_in_a_row_2_opp() {
     board.board[13][3] = CellContent::Opponent;
     board.board[14][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -645,7 +645,7 @@ fn evaluate_diag_up_left_5_in_a_row_3_opp() {
     board.board[3][13] = CellContent::Opponent;
     board.board[4][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -662,7 +662,7 @@ fn evaluate_diag_up_left_5_in_a_row_4_opp() {
     board.board[13][13] = CellContent::Opponent;
     board.board[14][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -679,7 +679,7 @@ fn evaluate_diag_up_left_5_in_a_row_5_opp() {
     board.board[18][13] = CellContent::Opponent;
     board.board[19][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -696,7 +696,7 @@ fn evaluate_horizontal_4_in_a_row_1_ally() {
     board.board[0][3] = CellContent::Ally;
     board.board[0][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -712,7 +712,7 @@ fn evaluate_horizontal_4_in_a_row_2_ally() {
     board.board[10][3] = CellContent::Ally;
     board.board[10][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -728,7 +728,7 @@ fn evaluate_horizontal_4_in_a_row_3_ally() {
     board.board[19][3] = CellContent::Ally;
     board.board[19][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -744,7 +744,7 @@ fn evaluate_horizontal_4_in_a_row_4_ally() {
     board.board[0][13] = CellContent::Ally;
     board.board[0][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -760,7 +760,7 @@ fn evaluate_horizontal_4_in_a_row_5_ally() {
     board.board[10][13] = CellContent::Ally;
     board.board[10][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -776,7 +776,7 @@ fn evaluate_vertical_4_in_a_row_1_ally() {
     board.board[3][0] = CellContent::Ally;
     board.board[4][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -792,7 +792,7 @@ fn evaluate_vertical_4_in_a_row_2_ally() {
     board.board[3][10] = CellContent::Ally;
     board.board[4][10] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -808,7 +808,7 @@ fn evaluate_vertical_4_in_a_row_3_ally() {
     board.board[13][0] = CellContent::Ally;
     board.board[14][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -824,7 +824,7 @@ fn evaluate_vertical_4_in_a_row_4_ally() {
     board.board[3][0] = CellContent::Ally;
     board.board[4][0] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -840,7 +840,7 @@ fn evaluate_vertical_4_in_a_row_5_ally() {
     board.board[13][10] = CellContent::Ally;
     board.board[14][10] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -856,7 +856,7 @@ fn evaluate_diag_up_right_4_in_a_row_1_ally() {
     board.board[2][3] = CellContent::Ally;
     board.board[1][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -872,7 +872,7 @@ fn evaluate_diag_up_right_4_in_a_row_2_ally() {
     board.board[11][3] = CellContent::Ally;
     board.board[10][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -888,7 +888,7 @@ fn evaluate_diag_up_right_4_in_a_row_3_ally() {
     board.board[2][12] = CellContent::Ally;
     board.board[1][13] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -904,7 +904,7 @@ fn evaluate_diag_up_right_4_in_a_row_4_ally() {
     board.board[11][13] = CellContent::Ally;
     board.board[10][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -920,7 +920,7 @@ fn evaluate_diag_up_right_4_in_a_row_5_ally() {
     board.board[16][3] = CellContent::Ally;
     board.board[15][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -936,7 +936,7 @@ fn evaluate_diag_up_left_4_in_a_row_1_ally() {
     board.board[3][3] = CellContent::Ally;
     board.board[4][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -952,7 +952,7 @@ fn evaluate_diag_up_left_4_in_a_row_2_ally() {
     board.board[13][3] = CellContent::Ally;
     board.board[14][4] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -968,7 +968,7 @@ fn evaluate_diag_up_left_4_in_a_row_3_ally() {
     board.board[3][13] = CellContent::Ally;
     board.board[4][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -984,7 +984,7 @@ fn evaluate_diag_up_left_4_in_a_row_4_ally() {
     board.board[13][13] = CellContent::Ally;
     board.board[14][14] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -1000,7 +1000,7 @@ fn evaluate_diag_up_left_4_in_a_row_5_ally() {
     board.board[17][12] = CellContent::Ally;
     board.board[18][13] = CellContent::Ally;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Ally);
 
     assert_eq!(result, target_result);
 }
@@ -1016,7 +1016,7 @@ fn evaluate_horizontal_4_in_a_row_1_opp() {
     board.board[0][3] = CellContent::Opponent;
     board.board[0][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1032,7 +1032,7 @@ fn evaluate_horizontal_4_in_a_row_2_opp() {
     board.board[10][3] = CellContent::Opponent;
     board.board[10][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1048,7 +1048,7 @@ fn evaluate_horizontal_4_in_a_row_3_opp() {
     board.board[19][3] = CellContent::Opponent;
     board.board[19][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1064,7 +1064,7 @@ fn evaluate_horizontal_4_in_a_row_4_opp() {
     board.board[0][13] = CellContent::Opponent;
     board.board[0][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1080,7 +1080,7 @@ fn evaluate_horizontal_4_in_a_row_5_opp() {
     board.board[10][13] = CellContent::Opponent;
     board.board[10][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1096,7 +1096,7 @@ fn evaluate_vertical_4_in_a_row_1_opp() {
     board.board[3][0] = CellContent::Opponent;
     board.board[4][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1112,7 +1112,7 @@ fn evaluate_vertical_4_in_a_row_2_opp() {
     board.board[3][10] = CellContent::Opponent;
     board.board[4][10] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1128,7 +1128,7 @@ fn evaluate_vertical_4_in_a_row_3_opp() {
     board.board[13][0] = CellContent::Opponent;
     board.board[14][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1144,7 +1144,7 @@ fn evaluate_vertical_4_in_a_row_4_opp() {
     board.board[3][0] = CellContent::Opponent;
     board.board[4][0] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1160,7 +1160,7 @@ fn evaluate_vertical_4_in_a_row_5_opp() {
     board.board[13][10] = CellContent::Opponent;
     board.board[14][10] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1176,7 +1176,7 @@ fn evaluate_diag_up_right_4_in_a_row_1_opp() {
     board.board[2][3] = CellContent::Opponent;
     board.board[1][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1192,7 +1192,7 @@ fn evaluate_diag_up_right_4_in_a_row_2_opp() {
     board.board[11][3] = CellContent::Opponent;
     board.board[10][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1208,7 +1208,7 @@ fn evaluate_diag_up_right_4_in_a_row_3_opp() {
     board.board[2][12] = CellContent::Opponent;
     board.board[1][13] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1224,7 +1224,7 @@ fn evaluate_diag_up_right_4_in_a_row_4_opp() {
     board.board[11][13] = CellContent::Opponent;
     board.board[10][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1240,7 +1240,7 @@ fn evaluate_diag_up_right_4_in_a_row_5_opp() {
     board.board[16][3] = CellContent::Opponent;
     board.board[15][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1256,7 +1256,7 @@ fn evaluate_diag_up_left_4_in_a_row_1_opp() {
     board.board[3][3] = CellContent::Opponent;
     board.board[4][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1272,7 +1272,7 @@ fn evaluate_diag_up_left_4_in_a_row_2_opp() {
     board.board[13][3] = CellContent::Opponent;
     board.board[14][4] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1288,7 +1288,7 @@ fn evaluate_diag_up_left_4_in_a_row_3_opp() {
     board.board[3][13] = CellContent::Opponent;
     board.board[4][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1304,7 +1304,7 @@ fn evaluate_diag_up_left_4_in_a_row_4_opp() {
     board.board[13][13] = CellContent::Opponent;
     board.board[14][14] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
@@ -1320,7 +1320,7 @@ fn evaluate_diag_up_left_4_in_a_row_5_opp() {
     board.board[17][12] = CellContent::Opponent;
     board.board[18][13] = CellContent::Opponent;
 
-    result = evaluate(&board);
+    result = evaluate(&board, Stone::Opponent);
 
     assert_eq!(result, target_result);
 }
