@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{ops::Not, str::FromStr};
 
 /// Enumerates the two possible stone types
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -31,6 +31,35 @@ pub enum CellContent {
     ///
     /// See [`Stone::Opponent`]
     Opponent = Stone::Opponent as isize,
+}
+
+/// Custom overload of the `!` operator for the Stone type,
+/// allowing to express easily the "other" stone type
+/// 
+/// ```
+/// assert_eq!(!Stone::Ally, Stone::Opponent);
+/// assert_eq!(!Stone::Opponent, Stone::Ally);
+/// ```
+impl Not for Stone {
+    type Output = Self;
+
+    fn not(self) -> Self::Output {
+        match self {
+            Self::Ally => Self::Opponent,
+            Self::Opponent => Self::Ally,
+        }
+    }
+}
+
+/// Simple trait implementation to allow
+/// creating a `CellContent` from a `Stone`
+impl From<Stone> for CellContent {
+    fn from(value: Stone) -> Self {
+        match value {
+            Stone::Ally => CellContent::Ally,
+            Stone::Opponent => CellContent::Opponent,
+        }
+    }
 }
 
 impl CellContent {
