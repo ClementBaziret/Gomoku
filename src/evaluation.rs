@@ -1,4 +1,4 @@
-use crate::model::CellContent;
+use crate::model::{CellContent, Stone};
 use crate::{
     board::Board,
     grid_iterators::{
@@ -560,7 +560,7 @@ fn check_rows_in_board(board: &Board) -> i32 {
     score
 }
 
-pub fn evaluate(board: &Board) -> i32 {
+pub fn evaluate(board: &Board, just_played: Stone) -> i32 {
     let i = check_rows_in_board(board);
     i
 }

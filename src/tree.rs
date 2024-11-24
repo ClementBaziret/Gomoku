@@ -1,10 +1,9 @@
 use std::{
-    cell::Cell,
     cmp::{max, min},
     i32,
 };
 
-use crate::evaluation::{evaluate, FIVE_IN_A_ROW};
+use crate::{evaluation::{evaluate, FIVE_IN_A_ROW}, model::Stone};
 use crate::{board::Board, model::CellContent};
 
 #[derive(Debug, PartialEq)]
@@ -38,69 +37,32 @@ where
     IndexType: Into<usize>,
 {
     fn new(x: IndexType, y: IndexType) -> Self;
-
-    fn play_move_on_board(&self, board: &mut Board);
-
+    
+    fn content() -> Stone;
+    
     fn get_coords(&self) -> (IndexType, IndexType);
-
-    fn undo_move_on_board(&self, board: &mut Board);
-
+    
     fn get_subtree(&mut self) -> &mut Vec<impl Move<IndexType>>;
-
+    
     fn get_value(&mut self) -> &mut Option<i32>;
-
+    
     fn choose_move(num1: i32, num2: i32) -> i32;
-}
-
-trait AMove {
-    fn _new(x: u8, y: u8) -> Self;
-
-    fn _get_coords(&self) -> (u8, u8);
-
-    fn content() -> CellContent;
-
-    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>>;
-
-    fn _get_value(&mut self) -> &mut Option<i32>;
-
-    fn _choose_move(num1: i32, num2: i32) -> i32;
-}
-
-impl<T: AMove> Move<u8> for T {
-    fn new(x: u8, y: u8) -> Self {
-        Self::_new(x, y)
-    }
-
-    fn get_coords(&self) -> (u8, u8) {
-        self._get_coords()
-    }
 
     fn play_move_on_board(&self, board: &mut Board) {
-        let (x, y) = self._get_coords();
-        board.board[y as usize][x as usize] = Self::content();
-    }
+        let (x, y) = self.get_coords();
 
+        board.board[y.into()][x.into()] = Self::content().into();
+    }
+    
     fn undo_move_on_board(&self, board: &mut Board) {
-        let (x, y) = self._get_coords();
+        let (x, y) = self.get_coords();
 
-        board.board[y as usize][x as usize] = CellContent::Empty;
-    }
-
-    fn get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
-        self._get_subtree()
-    }
-
-    fn get_value(&mut self) -> &mut Option<i32> {
-        self._get_value()
-    }
-
-    fn choose_move(num1: i32, num2: i32) -> i32 {
-        Self::_choose_move(num1, num2)
+        board.board[y.into()][x.into()] = CellContent::Empty;
     }
 }
 
-impl AMove for AllyMove {
-    fn _new(x: u8, y: u8) -> Self {
+impl Move<u8> for AllyMove {
+    fn new(x: u8, y: u8) -> Self {
         Self {
             x,
             y,
@@ -109,29 +71,29 @@ impl AMove for AllyMove {
         }
     }
 
-    fn content() -> CellContent {
-        CellContent::Ally
+    fn content() -> Stone {
+        Stone::Ally
     }
 
-    fn _get_coords(&self) -> (u8, u8) {
+    fn get_coords(&self) -> (u8, u8) {
         (self.x, self.y)
     }
 
-    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
+    fn get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
         &mut self.opp_moves
     }
 
-    fn _get_value(&mut self) -> &mut Option<i32> {
+    fn get_value(&mut self) -> &mut Option<i32> {
         &mut self.value
     }
 
-    fn _choose_move(num1: i32, num2: i32) -> i32 {
+    fn choose_move(num1: i32, num2: i32) -> i32 {
         min(num1, num2)
     }
 }
 
-impl AMove for OpponentMove {
-    fn _new(x: u8, y: u8) -> Self {
+impl Move<u8> for OpponentMove {
+    fn new(x: u8, y: u8) -> Self {
         Self {
             x,
             y,
@@ -140,23 +102,23 @@ impl AMove for OpponentMove {
         }
     }
 
-    fn content() -> CellContent {
-        CellContent::Opponent
+    fn content() -> Stone {
+        Stone::Opponent
     }
 
-    fn _get_coords(&self) -> (u8, u8) {
+    fn get_coords(&self) -> (u8, u8) {
         (self.x, self.y)
     }
 
-    fn _get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
+    fn get_subtree(&mut self) -> &mut Vec<impl Move<u8>> {
         &mut self.ally_moves.moves
     }
 
-    fn _get_value(&mut self) -> &mut Option<i32> {
+    fn get_value(&mut self) -> &mut Option<i32> {
         &mut self.value
     }
 
-    fn _choose_move(num1: i32, num2: i32) -> i32 {
+    fn choose_move(num1: i32, num2: i32) -> i32 {
         max(num1, num2)
     }
 }
@@ -186,7 +148,7 @@ impl AllyMove {
     pub fn gen_opponent_moves(&mut self, board: &mut Board) {
         self.opp_moves = generate_next_adjacent(board, self)
             .into_iter()
-            .map(|(x, y)| OpponentMove::_new(x, y))
+            .map(|(x, y)| OpponentMove::new(x, y))
             .collect();
     }
 }
@@ -195,7 +157,7 @@ impl OpponentMove {
     pub fn gen_ally_moves(&mut self, board: &mut Board) {
         self.ally_moves.moves = generate_next_adjacent(board, self)
             .into_iter()
-            .map(|(x, y)| AllyMove::_new(x, y))
+            .map(|(x, y)| AllyMove::new(x, y))
             .collect();
     }
 }
@@ -239,7 +201,7 @@ where
     to_eval.play_move_on_board(board);
 
     let ret = 'score: {
-        let lose_win_score = evaluate(board);
+        let lose_win_score = evaluate(board, MoveType::content());
         if lose_win_score >= (FIVE_IN_A_ROW * 3 / 4)
             || lose_win_score <= (-FIVE_IN_A_ROW * 3 / 4)
         {
@@ -249,7 +211,7 @@ where
         let subtree = to_eval.get_subtree();
 
         if subtree.is_empty() {
-            let score = evaluate(board);
+            let score = evaluate(board, MoveType::content());
             *to_eval.get_value() = Some(score);
 
             score
